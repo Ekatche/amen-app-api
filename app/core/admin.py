@@ -12,7 +12,7 @@ class UserAdmin(BaseUserAdmin):
     """define the admin page for user"""
 
     ordering = ["id"]
-    list_display = ["email", "name"]
+    list_display = ["email", "first_name", "last_name"]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (

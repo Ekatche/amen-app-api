@@ -8,6 +8,8 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
+CHOICES_GENDER = (("m", "Male"), ("f", "Female"))
+
 
 class UserManager(BaseUserManager):
     """Manger for user"""
@@ -15,8 +17,14 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_field):
         """create and save a new user"""
         if not email:
-            raise ValueError("User must has an email address.")
-        user = self.model(email=self.normalize_email(email), **extra_field)
+            # ensure that the email address is written
+            raise ValueError("User must have an email address.")
+
+        user = self.model(
+            email=self.normalize_email(email),
+            first_name=extra_field.get("first_name", None),
+            last_name=extra_field.get("last_name", None),
+        )
         user.set_password(password)
         user.save(using=self._db)
 
@@ -35,10 +43,20 @@ class User(AbstractBaseUser, PermissionsMixin):
     """User in the system"""
 
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = UserManager()
+    # additional information since it will be an e-commerce api
+    birth_date = models.DateTimeField()
+    gender = models.CharField(
+        max_length=1, choices=CHOICES_GENDER, default="m", help_text='"m" or "f"'
+    )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    phone_prefix = models.CharField(max_length=10, default="+33", null=True, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
     USERNAME_FIELD = "email"
