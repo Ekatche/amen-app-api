@@ -1,5 +1,5 @@
 """
-Database models
+Database models for user
 """
 from django.db import models
 from django.contrib.auth.models import (
@@ -22,8 +22,8 @@ class UserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            first_name=extra_field.get("first_name", None),
-            last_name=extra_field.get("last_name", None),
+            first_name=extra_field.get("first_name", "Test"),
+            last_name=extra_field.get("last_name", "Name"),
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -31,8 +31,13 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, password=None, **estra_field):
-        """Create and return a new super user"""
-        user = self.create_user(email, password)
+        """Create and return a new superuser"""
+        user = self.create_user(
+            email,
+            password,
+            first_name=estra_field.get("first_name", "Test"),
+            last_name=estra_field.get("last_name", "Name"),
+        )
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -58,5 +63,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     phone_prefix = models.CharField(max_length=10, default="+33", null=True, blank=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+
+    objects = UserManager()
 
     USERNAME_FIELD = "email"
