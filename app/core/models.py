@@ -49,12 +49,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
 
     # additional information since it will be an e-commerce api
-    birth_date = models.DateTimeField()
+    birth_date = models.DateTimeField(null=True, blank=True)
     gender = models.CharField(
         max_length=1, choices=CHOICES_GENDER, default="m", help_text='"m" or "f"'
     )
     date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     phone_prefix = models.CharField(max_length=10, default="+33", null=True, blank=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
