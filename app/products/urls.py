@@ -7,10 +7,10 @@ from django.urls import (
     include,
 )
 from rest_framework.routers import DefaultRouter
-import views
+from .views import ProductViewSet
 
 router = DefaultRouter()
-router.register("product", views.ProductViewSet)
+router.register("product", ProductViewSet)
 
 app_name = "product"
 
