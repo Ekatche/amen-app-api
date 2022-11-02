@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     # Internal config
     "core",
     "user",
-    "products.apps.ProductsConfig",
+    "products",
+    "categories",
 ]
 
 MIDDLEWARE = [
