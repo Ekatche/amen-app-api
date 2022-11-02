@@ -9,6 +9,7 @@ from ..serializers import ProductSerializer
 
 class ProductViewSet(viewsets.ModelViewSet):
     """View for manage Product APIs"""
+
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     authentication_classes = []

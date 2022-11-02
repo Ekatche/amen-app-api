@@ -9,7 +9,6 @@ from django.db.utils import OperationalError
 from django.test import SimpleTestCase
 
 
-
 @patch("django.db.utils.ConnectionHandler.__getitem__")
 class CommandTests(SimpleTestCase):
     """Test commands."""

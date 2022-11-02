@@ -15,20 +15,22 @@ from categories.models import Category
 from products.serializers import ProductSerializer
 
 
-PRODUCTS_URL =reverse("product:product-list")
+PRODUCTS_URL = reverse("product:product-list")
+
 
 def create_user(**params):
     """Create and return a new user"""
     return get_user_model().objects.create_user(**params)
 
+
 def create_product(**params):
-    """ Create and return a sample product """
+    """Create and return a sample product"""
     defaults = {
-        'name': 'Test product',
-        'description': 'Sample Descritpion',
-        'price': Decimal('5.25'),
-        'is_available': True,
-        'on_promo': False,
+        "name": "Test product",
+        "description": "Sample Descritpion",
+        "price": Decimal("5.25"),
+        "is_available": True,
+        "on_promo": False,
     }
     defaults.update(params)
 
@@ -37,21 +39,19 @@ def create_product(**params):
 
 
 class PublicProductAPITest(TestCase):
-    """ Test Unauthenticated API requests """
+    """Test Unauthenticated API requests"""
+
     def setUp(self):
         self.client = APIClient()
-        self.category = Category.objects.create(
-            name="Test category",
-            is_active=True
-        )
+        self.category = Category.objects.create(name="Test category", is_active=True)
 
     def test_auth_required(self):
-        """ Test un authenticated user can access products"""
+        """Test un authenticated user can access products"""
 
         create_product()
 
         res = self.client.get(PRODUCTS_URL)
-        products = Product.objects.all().order_by('-id')
+        products = Product.objects.all().order_by("-id")
         serializer = ProductSerializer(products, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
@@ -59,6 +59,7 @@ class PublicProductAPITest(TestCase):
 
 class PrivateProductApiTest(TestCase):
     """Test authenticated API requests"""
+
     def setUp(self):
         self.client = APIClient()
         self.user = create_user(
@@ -68,18 +69,15 @@ class PrivateProductApiTest(TestCase):
             last_name="Name",
         )
         self.client.force_authenticate(self.user)
-        self.category = Category.objects.create(
-            name="Test category",
-            is_active=True
-        )
+        self.category = Category.objects.create(name="Test category", is_active=True)
 
     def test_retrieve_products(self):
-        """ Test retrieving a list of product """
+        """Test retrieving a list of product"""
 
         create_product()
 
         res = self.client.get(PRODUCTS_URL)
-        products = Product.objects.all().order_by('id')
+        products = Product.objects.all().order_by("id")
         serializer = ProductSerializer(products, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)

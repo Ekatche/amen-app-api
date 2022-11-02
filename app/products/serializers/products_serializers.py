@@ -7,11 +7,9 @@ from ..models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    """ Serializer for product """
+    """Serializer for product"""
+
     class Meta:
         model = Product
-        fields = [
-            'id', 'name', 'price',
-            'category'
-        ]
-        read_only_fields = ['id']
+        fields = ["id", "name", "price", "category"]
+        read_only_fields = ["id"]

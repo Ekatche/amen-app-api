@@ -1,1 +1,1 @@
-from .product_views import ProductViewSet
+from .product_views import ProductViewSet  # noqa:

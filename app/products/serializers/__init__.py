@@ -1,1 +1,1 @@
-from .products_serializers import ProductSerializer
+from .products_serializers import ProductSerializer  # noqa:

@@ -6,38 +6,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('categories', '0001_initial'),
-        ('products', '0001_initial'),
+        ("categories", "0001_initial"),
+        ("products", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='product',
+            name="product",
             options={},
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='level',
+            model_name="product",
+            name="level",
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='lft',
+            model_name="product",
+            name="lft",
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='parent',
+            model_name="product",
+            name="parent",
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='rght',
+            model_name="product",
+            name="rght",
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='tree_id',
+            model_name="product",
+            name="tree_id",
         ),
         migrations.AddField(
-            model_name='product',
-            name='category',
-            field=models.ManyToManyField(related_name='product_category', to='categories.Category'),
+            model_name="product",
+            name="category",
+            field=models.ManyToManyField(
+                related_name="product_category", to="categories.Category"
+            ),
         ),
     ]

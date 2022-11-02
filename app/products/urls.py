@@ -2,17 +2,18 @@
 URL mapping for the product app
 """
 
-from django.urls import (path,
-                         include,
-                         )
+from django.urls import (
+    path,
+    include,
+)
 from rest_framework.routers import DefaultRouter
-from .views import *
+import views
 
 router = DefaultRouter()
-router.register('product', ProductViewSet)
+router.register("product", views.ProductViewSet)
 
-app_name = 'product'
+app_name = "product"
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]
