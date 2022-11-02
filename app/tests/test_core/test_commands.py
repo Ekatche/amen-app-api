@@ -9,15 +9,6 @@ from django.db.utils import OperationalError
 from django.test import SimpleTestCase
 
 
-def test_wait_for_db_ready(patched_check):
-    """
-    test for database if database ready
-    :return:
-    """
-    patched_check.returned_value = True
-    call_command("wait_for_db")
-    patched_check.assert_called_once_with(databases=["default"])
-
 
 @patch("django.db.utils.ConnectionHandler.__getitem__")
 class CommandTests(SimpleTestCase):

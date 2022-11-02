@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from mptt.models import MPTTModel, TreeForeignKey
+from categories.models import Category
 
 
-class Product(MPTTModel):
+class Product(models.Model):
     """Product table Implemented with MPTT"""
 
     name = models.CharField(
@@ -14,22 +14,7 @@ class Product(MPTTModel):
     is_available = models.BooleanField(default=True)
     on_promo = models.BooleanField(default=False)
 
-    parent = TreeForeignKey(
-        "self",
-        on_delete=models.PROTECT,
-        related_name="children",
-        null=True,
-        blank=True,
-        unique=False,
-        verbose_name=_("parent of product"),
-    )
-
-    class MTTPMeta:
-        order_insertion_by = ["name"]
-
-    class Meta:
-        verbose_name = _("product")
-        verbose_name_plural = _("products")
+    category = models.ManyToManyField(Category, related_name="product_category")
 
     def __str__(self):
         return self.name
