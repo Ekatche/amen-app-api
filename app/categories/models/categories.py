@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Category(models.Model):
     """
-    Product categories implemented with MPTT
+    Product categories
     """
 
     name = models.CharField(
@@ -24,7 +24,7 @@ class Category(models.Model):
     )
 
     date_updated = models.DateTimeField(
-        auto_now=True, editable=True, verbose_name=_("Date category was created")
+        auto_now=True, editable=True, verbose_name=_("Date category was updated")
     )
 
     def __str__(self):

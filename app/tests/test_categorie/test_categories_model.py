@@ -20,3 +20,4 @@ class CategoryModelTests(TestCase):
         )
 
         self.assertEqual(str(sub_category), sub_category.name)
+        self.assertEqual(str(sub_category.category.name), category.name)
