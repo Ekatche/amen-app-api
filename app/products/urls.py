@@ -7,7 +7,7 @@ from django.urls import (
     include,
 )
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
+from .views import ProductViewSet, ProductPromotionView
 
 router = DefaultRouter()
 router.register("product", ProductViewSet)
@@ -16,4 +16,5 @@ app_name = "product"
 
 urlpatterns = [
     path("", include(router.urls)),
+    path("voucher/", ProductPromotionView.as_view()),
 ]

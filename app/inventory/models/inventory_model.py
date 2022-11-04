@@ -6,7 +6,7 @@ from products.models import Product
 class Inventory(models.Model):
     """Product Inventory model"""
 
-    product = models.ForeignKey(
+    product = models.OneToOneField(
         Product,
         on_delete=models.CASCADE,
     )
