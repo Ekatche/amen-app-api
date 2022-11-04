@@ -67,3 +67,83 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
+
+
+class Shipping(models.Model):
+
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    building_number = models.CharField(
+        max_length=100, blank=True, default="", null=True
+    )
+    street = models.CharField(max_length=100, blank=True, null=True, default="")
+    city = models.CharField(max_length=100, blank=True, null=True, default="")
+    postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    @property
+    def address(self) -> str:
+        if self.building_number:
+            if self.street and self.postcode and self.city:
+                return (
+                    self.building_number
+                    + " "
+                    + self.street
+                    + " "
+                    + self.postcode
+                    + " "
+                    + self.city
+                )
+            elif self.street and self.postcode and not self.city:
+                return self.building_number + " " + self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.building_number + " " + self.street + " " + self.city
+            else:
+                return ""
+        else:
+            if self.street and self.postcode and self.city:
+                return self.street + " " + self.postcode + " " + self.city
+            elif self.street and self.postcode and not self.city:
+                return self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.street + " " + self.city
+            else:
+                return ""
+
+
+class Billing(models.Model):
+
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    building_number = models.CharField(
+        max_length=100, blank=True, default="", null=True
+    )
+    street = models.CharField(max_length=100, blank=True, null=True, default="")
+    city = models.CharField(max_length=100, blank=True, null=True, default="")
+    postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    @property
+    def address(self) -> str:
+        if self.building_number:
+            if self.street and self.postcode and self.city:
+                return (
+                    self.building_number
+                    + " "
+                    + self.street
+                    + " "
+                    + self.postcode
+                    + " "
+                    + self.city
+                )
+            elif self.street and self.postcode and not self.city:
+                return self.building_number + " " + self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.building_number + " " + self.street + " " + self.city
+            else:
+                return ""
+        else:
+            if self.street and self.postcode and self.city:
+                return self.street + " " + self.postcode + " " + self.city
+            elif self.street and self.postcode and not self.city:
+                return self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.street + " " + self.city
+            else:
+                return ""
