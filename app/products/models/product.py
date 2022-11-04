@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from categories.models import Category
+from categories.models import Category, SubCategory
+from .promotion import Promotion
 
 
 class Product(models.Model):
@@ -13,8 +14,17 @@ class Product(models.Model):
     description = models.TextField()
     is_available = models.BooleanField(default=True)
     on_promo = models.BooleanField(default=False)
-
+    promo = models.ForeignKey(
+        Promotion, blank=True, null=True, on_delete=models.PROTECT
+    )
     category = models.ManyToManyField(Category, related_name="product_category")
+    subcategory = models.ForeignKey(
+        SubCategory,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        verbose_name=_("subcategory"),
+    )
 
     def __str__(self):
         return self.name
