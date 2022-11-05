@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.utils.translation import gettext_lazy as _
 
 CHOICES_GENDER = (("m", "Male"), ("f", "Female"))
 
@@ -67,3 +68,89 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = "email"
+
+
+class ShippingAddress(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    building_number = models.CharField(
+        max_length=100, blank=True, default="", null=True
+    )
+    street = models.CharField(max_length=100, blank=True, null=True, default="")
+    city = models.CharField(max_length=100, blank=True, null=True, default="")
+    postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    class Meta:
+        verbose_name = _("shipping address")
+        verbose_name_plural = _("shipping addresses")
+
+    @property
+    def address(self) -> str:
+        if self.building_number:
+            if self.street and self.postcode and self.city:
+                return (
+                    self.building_number
+                    + " "
+                    + self.street
+                    + " "
+                    + self.postcode
+                    + " "
+                    + self.city
+                )
+            elif self.street and self.postcode and not self.city:
+                return self.building_number + " " + self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.building_number + " " + self.street + " " + self.city
+            else:
+                return ""
+        else:
+            if self.street and self.postcode and self.city:
+                return self.street + " " + self.postcode + " " + self.city
+            elif self.street and self.postcode and not self.city:
+                return self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.street + " " + self.city
+            else:
+                return ""
+
+
+class BillingAddress(models.Model):
+    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    building_number = models.CharField(
+        max_length=100, blank=True, default="", null=True
+    )
+    street = models.CharField(max_length=100, blank=True, null=True, default="")
+    city = models.CharField(max_length=100, blank=True, null=True, default="")
+    postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    class Meta:
+        verbose_name = _("billing address")
+        verbose_name_plural = _("billing addresses")
+
+    @property
+    def address(self) -> str:
+        if self.building_number:
+            if self.street and self.postcode and self.city:
+                return (
+                    self.building_number
+                    + " "
+                    + self.street
+                    + " "
+                    + self.postcode
+                    + " "
+                    + self.city
+                )
+            elif self.street and self.postcode and not self.city:
+                return self.building_number + " " + self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.building_number + " " + self.street + " " + self.city
+            else:
+                return ""
+        else:
+            if self.street and self.postcode and self.city:
+                return self.street + " " + self.postcode + " " + self.city
+            elif self.street and self.postcode and not self.city:
+                return self.street + " " + self.postcode
+            elif self.street and not self.postcode and self.city:
+                return self.street + " " + self.city
+            else:
+                return ""

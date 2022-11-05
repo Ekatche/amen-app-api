@@ -28,6 +28,10 @@ class Coupons(models.Model):
     def __str__(self):
         return self.code
 
+    class Meta:
+        verbose_name = _("Coupon")
+        verbose_name_plural = _("Coupons")
+
 
 class Promotion(models.Model):
     """
@@ -44,6 +48,7 @@ class Promotion(models.Model):
     coupons = models.ForeignKey(
         Coupons, null=True, blank=True, on_delete=models.PROTECT
     )
+    date_start = models.DateField(null=True, blank=True)
 
     date_end = models.DateField(null=True, blank=True)
 

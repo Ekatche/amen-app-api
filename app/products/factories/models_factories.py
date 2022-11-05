@@ -2,7 +2,7 @@ import factory
 from decimal import Decimal
 from factory.django import DjangoModelFactory
 from categories.factories import CategoryFactory
-from ..models import Promotion, Product, Coupons
+from ..models import Promotion, Product, Coupons, Media
 
 
 # defining factories
@@ -54,3 +54,11 @@ class PromotionFactory(DjangoModelFactory):
     name = "OCTOBERTEST22"
     period = 2
     coupons = factory.SubFactory(CouponsFactory)
+
+
+class MediaFactory(DjangoModelFactory):
+    class Meta:
+        model = Media
+
+    product = factory.SubFactory(ProductFactory)
+    image = "image/default.png"

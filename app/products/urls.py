@@ -16,5 +16,5 @@ app_name = "product"
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("voucher/", ProductPromotionView.as_view()),
+    path("promotion/coupon/", ProductPromotionView.as_view()),
 ]
