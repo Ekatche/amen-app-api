@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+from django.utils.translation import gettext_lazy as _
 
 CHOICES_GENDER = (("m", "Male"), ("f", "Female"))
 
@@ -69,8 +70,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
 
 
-class Shipping(models.Model):
-
+class ShippingAddress(models.Model):
     customer = models.ForeignKey(User, on_delete=models.PROTECT)
     building_number = models.CharField(
         max_length=100, blank=True, default="", null=True
@@ -78,6 +78,10 @@ class Shipping(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True, default="")
     city = models.CharField(max_length=100, blank=True, null=True, default="")
     postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    class Meta:
+        verbose_name = _("shipping address")
+        verbose_name_plural = _("shipping addresses")
 
     @property
     def address(self) -> str:
@@ -109,8 +113,7 @@ class Shipping(models.Model):
                 return ""
 
 
-class Billing(models.Model):
-
+class BillingAddress(models.Model):
     customer = models.ForeignKey(User, on_delete=models.PROTECT)
     building_number = models.CharField(
         max_length=100, blank=True, default="", null=True
@@ -118,6 +121,10 @@ class Billing(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True, default="")
     city = models.CharField(max_length=100, blank=True, null=True, default="")
     postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+
+    class Meta:
+        verbose_name = _("billing address")
+        verbose_name_plural = _("billing addresses")
 
     @property
     def address(self) -> str:

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from products.models import Product
-from core.models import User, Shipping
+from core.models import User, ShippingAddress
 
 
 STATUS_CHOICES = (
@@ -34,6 +34,8 @@ class ShoppingCard(models.Model):
         auto_now=True, editable=True, verbose_name=_("Date ShoppingCard was updated")
     )
 
+    amount_due = models.IntegerField(default=0)
+
     is_validated = models.BooleanField(default=False)
 
     class Meta:
@@ -51,7 +53,7 @@ class Order(models.Model):
     )
 
     shipping = models.OneToOneField(
-        Shipping, blank=True, null=True, on_delete=models.PROTECT
+        ShippingAddress, blank=True, null=True, on_delete=models.PROTECT
     )
 
     customer = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -65,6 +67,8 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Shopping Card",
     )
+
+    amount_due = models.IntegerField(default=0)
 
     status = models.CharField(max_length=25, default="Pending", choices=STATUS_CHOICES)
 
