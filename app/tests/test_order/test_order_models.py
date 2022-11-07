@@ -12,9 +12,8 @@ class OrderModelTest(TestCase):
 
     def test_create_order(self):
         order = Order.objects.all()
-        self.assertTrue(len(order)>1)
+        self.assertTrue(len(order) > 1)
 
     def test_create_shoppingart(self):
         cart = ShoppingCart.objects.all()
-        self.assertTrue(len(cart)>1)
-
+        self.assertTrue(len(cart) > 1)

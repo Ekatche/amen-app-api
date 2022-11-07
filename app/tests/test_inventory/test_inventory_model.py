@@ -9,12 +9,15 @@ class InventoryModelTest(TestCase):
     """
     test Inventory model
     """
+
     def setUp(self) -> None:
-        self.product= ProductFactory(name= "test for inventory")
-        InventoryFactory(product = self.product)
+        self.product = ProductFactory(name="test for inventory")
+        InventoryFactory(product=self.product)
 
     def test_create_product_and_get_inventory(self):
         """Test creating a product inventory is successful"""
-        product = Inventory.objects.get(product=Product.objects.get(name="test for inventory"))
+        product = Inventory.objects.get(
+            product=Product.objects.get(name="test for inventory")
+        )
         self.assertEqual(str(product.product.name), "test for inventory")
         self.assertEqual(product.total, 10)
