@@ -23,6 +23,7 @@ class Inventory(models.Model):
         auto_now=True, editable=True, verbose_name=_("Date product was updated")
     )
 
+    @property
     def get_available_quatity(self):
         return self.total - self.quantity_sold
 

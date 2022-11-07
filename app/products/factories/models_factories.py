@@ -1,7 +1,6 @@
 import factory
 from decimal import Decimal
 from factory.django import DjangoModelFactory
-from categories.factories import CategoryFactory
 from ..models import Promotion, Product, Coupons, Media
 
 
@@ -17,10 +16,6 @@ class ProductFactory(DjangoModelFactory):
     on_promo = False
     price = Decimal("5.50")
     description = "Sample receipe description."
-    category = factory.RelatedFactory(
-        CategoryFactory,
-        factory_related_name='product'
-    )
 
 
 class CouponsFactory(DjangoModelFactory):

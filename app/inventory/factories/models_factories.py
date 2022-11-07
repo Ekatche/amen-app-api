@@ -8,6 +8,6 @@ class InventoryFactory(DjangoModelFactory):
     class Meta:
         model = Inventory
 
-    Product = factory.RelatedFactory(ProductFactory, factory_related_name="product")
+    product = factory.SubFactory(ProductFactory)
     quantity_sold = 5
     total = 10

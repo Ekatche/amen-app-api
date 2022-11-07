@@ -7,7 +7,7 @@ class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
 
-    email = "Testca@example.com"
+    email = factory.Faker('email')
     first_name = "Case"
     last_name = "Test"
 

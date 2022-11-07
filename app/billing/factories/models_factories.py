@@ -9,10 +9,10 @@ class InvoiceFactory(DjangoModelFactory):
     class Meta:
         model = Invoice
 
-    billing = factory.RelatedFactory(
-        BillingAddressFactory, factory_related_name="invoice"
+    billing = factory.SubFactory(
+        BillingAddressFactory
     )
-    order = factory.RelatedFactory(OrderFactory, factory_related_name="order_invoice")
+    order = factory.SubFactory(OrderFactory)
     payment_method = "Card"
     amount_due = 15
     amount_paid = 15
