@@ -8,4 +8,5 @@ class CategoryFactory(DjangoModelFactory):
         model = Category
 
     name = "Sample recipe name"
+    slug = "test slug"
     is_active = True

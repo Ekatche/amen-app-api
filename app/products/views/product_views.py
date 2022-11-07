@@ -11,6 +11,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     """View for manage Product APIs"""
 
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(is_available=True)
+    lookup_field = "slug"
     authentication_classes = []
     permission_classes = []

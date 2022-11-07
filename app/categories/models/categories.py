@@ -14,6 +14,7 @@ class Category(models.Model):
         blank=False,
         verbose_name="categories name",
     )
+    slug = models.SlugField(max_length=200, unique=True, db_index=True, default="")
 
     is_active = models.BooleanField(
         default=True, null=False, blank=False, verbose_name=_("product visibility")
@@ -31,6 +32,7 @@ class Category(models.Model):
         return self.name
 
     class Meta:
+        ordering = ("name",)
         verbose_name = _("product category")
         verbose_name_plural = _("product categories")
 
