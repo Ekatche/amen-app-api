@@ -71,7 +71,13 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class ShippingAddress(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    customer = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="shippingaddress",
+        null=True,
+        blank=True,
+    )
     building_number = models.CharField(
         max_length=100, blank=True, default="", null=True
     )
@@ -114,7 +120,13 @@ class ShippingAddress(models.Model):
 
 
 class BillingAddress(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    customer = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name="billingaddress",
+        null=True,
+        blank=True,
+    )
     building_number = models.CharField(
         max_length=100, blank=True, default="", null=True
     )

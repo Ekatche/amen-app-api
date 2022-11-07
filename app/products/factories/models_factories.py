@@ -17,23 +17,9 @@ class ProductFactory(DjangoModelFactory):
     on_promo = False
     price = Decimal("5.50")
     description = "Sample receipe description."
-
-    @factory.post_generation
-    def categories(self, create, extracted, **kwargs):
-        if not create:
-            # Simple build, do nothing.
-            return
-
-        if extracted:
-            # A list of groups were passed in, use them
-            for category in extracted:
-                self.categories.add(category)
-
-
-class ProductWithCategoryFactory(ProductFactory):
     category = factory.RelatedFactory(
         CategoryFactory,
-        factory_related_name="category",
+        factory_related_name='product'
     )
 
 

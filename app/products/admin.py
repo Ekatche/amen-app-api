@@ -8,9 +8,11 @@ from .models.promotion import Promotion, Coupons
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "subcategory", "price", "is_available", "on_promo"]
+    list_display = ["name", "slug", "subcategory", "price", "is_available", "on_promo"]
     list_filter = ["is_available", "on_promo"]
     search_fields = ["name", "category", "subcategory"]
+    list_editable = ["price", "is_available"]
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(Product, ProductAdmin)

@@ -14,33 +14,37 @@ STATUS_CHOICES = (
 )
 
 
-class ShoppingCard(models.Model):
+class ShoppingCart(models.Model):
 
     products = models.ForeignKey(
-        Product, blank=True, null=True, on_delete=models.PROTECT
+        Product,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="shoppingcart",
     )
 
-    customer = models.OneToOneField(User, on_delete=models.PROTECT)
+    customer = models.OneToOneField(
+        User, on_delete=models.PROTECT, related_name="shoppingcart"
+    )
 
     quantity = models.IntegerField()
 
     date_created = models.DateTimeField(
         auto_now_add=True,
         editable=True,
-        verbose_name=_("Date ShoppingCard was created"),
+        verbose_name=_("Date ShoppingCart was created"),
     )
 
     date_updated = models.DateTimeField(
-        auto_now=True, editable=True, verbose_name=_("Date ShoppingCard was updated")
+        auto_now=True, editable=True, verbose_name=_("Date ShoppingCart was updated")
     )
 
     amount_due = models.IntegerField(default=0)
 
-    is_validated = models.BooleanField(default=False)
-
     class Meta:
-        verbose_name = _("Shopping Card")
-        verbose_name_plural = _("Shopping Cards")
+        verbose_name = _("Shopping Cart")
+        verbose_name_plural = _("Shopping Carts")
 
 
 class Order(models.Model):
@@ -53,18 +57,23 @@ class Order(models.Model):
     )
 
     shipping = models.OneToOneField(
-        ShippingAddress, blank=True, null=True, on_delete=models.PROTECT
+        ShippingAddress,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="order_address",
     )
 
-    customer = models.ForeignKey(User, on_delete=models.PROTECT)
+    customer = models.ForeignKey(User, on_delete=models.PROTECT, related_name="order")
 
     quantity = models.IntegerField()
 
-    shoppingcard = models.OneToOneField(
-        ShoppingCard,
+    shoppingcart = models.OneToOneField(
+        ShoppingCart,
         blank=True,
         null=True,
         on_delete=models.CASCADE,
+        related_name="order",
         verbose_name="Shopping Card",
     )
 

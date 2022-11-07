@@ -36,10 +36,20 @@ class PaymentCard(models.Model):
 class Invoice(models.Model):
 
     billing = models.OneToOneField(
-        BillingAddress, on_delete=models.PROTECT, blank=True, null=True
+        BillingAddress,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name="invoice",
     )
 
-    order = models.OneToOneField(Order, on_delete=models.PROTECT, blank=True, null=True)
+    order = models.OneToOneField(
+        Order,
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        related_name="order_invoice",
+    )
 
     payment_method = models.CharField(
         default="Card", choices=CHOICES_PAYMETMETHOD, max_length=30

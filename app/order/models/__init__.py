@@ -1,1 +1,1 @@
-from .order_model import Order, ShoppingCard
+from .order_model import Order, ShoppingCart
