@@ -38,4 +38,6 @@ urlpatterns = [
     ),
     path("api/user/", include("user.urls")),
     path("api/product/", include("products.urls")),
+    path("api/category/", include("categories.urls")),
+    path("api/order/", include("order.urls")),
 ]

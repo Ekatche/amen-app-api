@@ -4,6 +4,7 @@ serializer for the user api view
 
 from django.contrib.auth import get_user_model, authenticate
 from django.utils.translation import gettext as _
+from core.models import BillingAddress, ShippingAddress
 from rest_framework import serializers
 
 
@@ -55,3 +56,33 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs["user"] = user
         return attrs
+
+
+class BillingAddressSerializer(serializers.ModelSerializer):
+    customer = UserSerializer(read_only=True)
+
+    class Meta:
+        model = BillingAddress
+        fields = [
+            "id",
+            "customer",
+            "building_number",
+            "street",
+            "city",
+            "postcode",
+        ]
+
+
+class ShippingAddressSerializer(serializers.ModelSerializer):
+    customer = UserSerializer(read_only=True)
+
+    class Meta:
+        model = ShippingAddress
+        fields = [
+            "id",
+            "customer",
+            "building_number",
+            "street",
+            "city",
+            "postcode",
+        ]

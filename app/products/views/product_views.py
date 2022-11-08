@@ -8,7 +8,9 @@ from ..serializers import ProductSerializer
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    """View for manage Product APIs"""
+    """
+    API to manage products
+    """
 
     serializer_class = ProductSerializer
     queryset = Product.objects.filter(is_available=True)
