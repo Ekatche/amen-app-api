@@ -3,7 +3,7 @@ Serializers for products APIs
 """
 
 from rest_framework import serializers
-from ..models import Product, Coupons, Promotion
+from ..models import Product, Coupons, Promotion, Media
 from categories.serializers import CategorySerializer, SubCategorySerializer
 
 
@@ -51,6 +51,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "slug",
+            "images",
             "category",
             "subcategory",
             "description",
@@ -61,3 +62,11 @@ class ProductSerializer(serializers.ModelSerializer):
         lookup_field = "slug"
         read_only_fields = ["id"]
         extra_kwargs = {"url": {"lookup_field": "slug"}}
+
+
+class MediaSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Media
+        fields = ["__all__"]

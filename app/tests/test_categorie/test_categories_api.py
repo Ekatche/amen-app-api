@@ -8,6 +8,7 @@ from categories.models import Category, SubCategory
 from categories.serializers import CategorySerializer, SubCategorySerializer
 
 CATEGORY_URLS = reverse("category:category-list")
+SUBCATEGORY_URLS = reverse("category:subcategory-list")
 
 
 class PublicCategoriesAPITests(TestCase):
@@ -33,25 +34,23 @@ class PrivateCategoriesAPITests(TestCase):
         self.client = APIClient()
         self.user = UserAdminFactory()
         self.client.force_authenticate(self.user)
+        SubCategoryFactory()
+        SubCategoryFactory()
+        CategoryFactory()
+        CategoryFactory()
 
     def test_retrieve_categories(self):
-        CategoryFactory.create()
-        CategoryFactory.create()
-
         res = self.client.get(CATEGORY_URLS)
 
-        categories = Category.objects.all().order_by("-id").values()
+        categories = Category.objects.all().order_by("id")
         serializer = CategorySerializer(categories, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
     def test_retrieve_subcategories(self):
-        SubCategoryFactory.create()
-        SubCategoryFactory.create()
-
-        res = self.client.get(CATEGORY_URLS)
-        subcategories = SubCategory.objects.all().order_by("-id").values()
+        res = self.client.get(SUBCATEGORY_URLS)
+        subcategories = SubCategory.objects.all().order_by("id")
         serializer = SubCategorySerializer(subcategories, many=True)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
