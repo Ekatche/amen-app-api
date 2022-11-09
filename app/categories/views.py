@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .models import SubCategory, Category
 from .serializers import CategorySerializer, SubCategorySerializer
+from core.permissions import BackofficePermission
 
 
 class CategoryViewset(viewsets.ModelViewSet):
@@ -10,6 +11,7 @@ class CategoryViewset(viewsets.ModelViewSet):
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [BackofficePermission]
 
 
 class SubCategoryViewset(viewsets.ModelViewSet):
@@ -19,3 +21,4 @@ class SubCategoryViewset(viewsets.ModelViewSet):
 
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
+    permission_classes = [BackofficePermission]

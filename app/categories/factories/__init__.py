@@ -1,1 +1,1 @@
-from .category_factories import CategoryFactory  # noqa
+from .category_factories import CategoryFactory, SubCategoryFactory

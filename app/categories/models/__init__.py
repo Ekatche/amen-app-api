@@ -1,2 +1,1 @@
-from .categories import Category  # noqa:
-from .categories import SubCategory  # noqa:
+from .categories import Category, SubCategory

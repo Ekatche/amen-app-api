@@ -3,8 +3,10 @@ from rest_framework import routers
 from .views import SubCategoryViewset, CategoryViewset
 
 router = routers.DefaultRouter()
-router.register("category", CategoryViewset)
-router.register("subcategory", SubCategoryViewset)
+router.register("categories", CategoryViewset)
+router.register("subcategories", SubCategoryViewset)
+
+app_name = "category"
 
 urlpatterns = [
     path("", include(router.urls)),
