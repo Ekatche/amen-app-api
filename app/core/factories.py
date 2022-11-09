@@ -12,6 +12,16 @@ class UserFactory(DjangoModelFactory):
     last_name = "Test"
 
 
+class UserAdminFactory(DjangoModelFactory):
+    class Meta:
+        model = User
+
+    email = factory.Faker("email")
+    first_name = "Case"
+    last_name = "Test"
+    amen_role = "amen_admin"
+
+
 class BillingAddressFactory(DjangoModelFactory):
     class Meta:
         model = BillingAddress

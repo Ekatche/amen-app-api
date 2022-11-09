@@ -10,6 +10,14 @@ from django.contrib.auth.models import (
 from django.utils.translation import gettext_lazy as _
 
 CHOICES_GENDER = (("m", "Male"), ("f", "Female"))
+ROLE_ADMIN = "amen_admin"
+ROLE_DEV = "amen_dev"
+ROLE_SALES = "amen_sales"
+CHOICES_AMEN_ROLES = (
+    (ROLE_ADMIN, "Administrateur"),
+    (ROLE_DEV, "Développeur"),
+    (ROLE_SALES, "Commercial"),
+)
 
 
 class UserManager(BaseUserManager):
@@ -64,6 +72,15 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     phone_prefix = models.CharField(max_length=10, default="+33", null=True, blank=True)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+
+    amen_role = models.CharField(
+        max_length=20,
+        null=True,
+        blank=True,
+        choices=CHOICES_AMEN_ROLES,
+        default=None,
+        help_text="only used for backoffice purpose, not for classic user",
+    )
 
     objects = UserManager()
 
