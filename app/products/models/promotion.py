@@ -18,6 +18,7 @@ class Coupons(models.Model):
         unique=True,
         help_text="Voucher code (keep confidential). Must be unique.",
     )
+
     discount = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )

@@ -3,8 +3,38 @@ Serializers for products APIs
 """
 
 from rest_framework import serializers
-from ..models import Product
+from ..models import Product, Coupons, Promotion
 from categories.serializers import CategorySerializer, SubCategorySerializer
+
+
+class CouponsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupons
+        fields = [
+            "id",
+            "name",
+            "code",
+            "discount",
+            "is_active",
+            "date_updated",
+            "date_created",
+        ]
+
+
+class PromotionSerializer(serializers.ModelSerializer):
+    coupons = CouponsSerializer(read_only=True)
+
+    class Meta:
+        model = Promotion
+        fields = [
+            "id",
+            "name",
+            "period",
+            "coupons",
+            "date_start",
+            "date_end" "date_updated",
+            "date_created",
+        ]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -12,6 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     subcategory = SubCategorySerializer(read_only=True)
     category = CategorySerializer(read_only=True)
+    promo = PromotionSerializer(read_only=True)
 
     class Meta:
         model = Product

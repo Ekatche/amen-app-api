@@ -17,13 +17,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {"fields": ("email", "password")}),
         (
             _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                )
-            },
+            {"fields": ("is_active", "is_staff", "is_superuser", "amen_role")},
         ),
         (_("Imporant dates"), {"fields": ("last_login",)}),
     )

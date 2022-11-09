@@ -1,1 +1,5 @@
-from .products_serializers import ProductSerializer  # noqa:
+from .products_serializers import (
+    ProductSerializer,
+    PromotionSerializer,
+    CouponsSerializer,
+)  # noqa:

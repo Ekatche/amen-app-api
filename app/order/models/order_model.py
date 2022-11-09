@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from products.models import Product
+from products.models import Product, Coupons
 from core.models import User, ShippingAddress
 
 STATUS_CHOICES = (
@@ -104,6 +104,14 @@ class Order(models.Model):
 
     date_updated = models.DateTimeField(
         auto_now=True, editable=True, verbose_name=_("Date order was updated")
+    )
+    coupons = models.OneToOneField(
+        Coupons,
+        blank=True,
+        null=True,
+        default="",
+        related_name="orders",
+        on_delete=models.PROTECT,
     )
 
     class Meta:
