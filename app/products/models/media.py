@@ -9,7 +9,7 @@ class Media(models.Model):
     """
 
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="images"
+        Product, on_delete=models.PROTECT, related_name="images"
     )
     image = models.ImageField(
         unique=False,
@@ -19,6 +19,11 @@ class Media(models.Model):
         upload_to="images/",
         default="images/default.png",
         help_text=_("format: required, default-default.png"),
+    )
+    is_feature = models.BooleanField(
+        default=False,
+        verbose_name=_("product default image"),
+        help_text=_("wether the image is the main image for that product"),
     )
     date_created = models.DateTimeField(
         auto_now_add=True, editable=True, verbose_name=_("Date image was uploaded")
