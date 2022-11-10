@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
+    "django_elasticsearch_dsl",
     # Internal config
     "core",
     "user",
@@ -49,6 +50,8 @@ INSTALLED_APPS = [
     "inventory",
     "order",
     "billing",
+    # developemnt
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -59,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -141,3 +145,11 @@ REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
 
 PAYPAL_RECEIVER_EMAIL = ""
 PAYPAL_TEST = True
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
+
+ELASTICSEARCH_DSL = {"default": {"host": "localhost:9200"}}

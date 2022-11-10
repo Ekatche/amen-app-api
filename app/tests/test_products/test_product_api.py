@@ -8,8 +8,7 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
-
-
+from core.factories import UserAdminFactory
 from products.models import Product
 from categories.models import Category
 from products.serializers import ProductSerializer
@@ -62,18 +61,13 @@ class PrivateProductApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = create_user(
-            email="test@example.com",
-            password="Testpass123",
-            first_name="Test",
-            last_name="Name",
-        )
+        self.user = UserAdminFactory()
         self.client.force_authenticate(self.user)
-        self.category = Category.objects.create(name="Test category", is_active=True)
 
     def test_retrieve_products(self):
         """Test retrieving a list of product"""
 
+        create_product()
         create_product()
 
         res = self.client.get(PRODUCTS_URL)

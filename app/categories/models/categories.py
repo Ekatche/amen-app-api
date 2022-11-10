@@ -17,7 +17,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length=200, unique=True, db_index=True, default="")
 
     is_active = models.BooleanField(
-        default=True, null=False, blank=False, verbose_name=_("product visibility")
+        default=True, null=False, blank=False, verbose_name=_("category availability")
     )
 
     date_created = models.DateTimeField(

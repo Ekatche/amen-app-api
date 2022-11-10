@@ -43,3 +43,15 @@ class MediaFactory(DjangoModelFactory):
 
     product = factory.SubFactory(ProductFactory)
     image = "image/default.png"
+
+
+class ProductWithPromoFactory(DjangoModelFactory):
+    class Meta:
+        model = Product
+
+    name = "Sample discoup product name"
+    is_available = True
+    on_promo = True
+    price = Decimal("5.50")
+    description = "Sample descounted product description."
+    promo = factory.SubFactory(PromotionFactory)

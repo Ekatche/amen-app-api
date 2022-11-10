@@ -46,3 +46,8 @@ class ReadOnlySalesBackofficePermission(BackofficePermission):
             request.method not in permissions.SAFE_METHODS
             and request.user.bimedoc_role == ROLE_SALES
         )
+
+
+class ReadOnlyPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS

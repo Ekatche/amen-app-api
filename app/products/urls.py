@@ -7,10 +7,12 @@ from django.urls import (
     include,
 )
 from rest_framework.routers import DefaultRouter
-from .views import ProductViewSet
+from .views import ProductViewSet, ProductPromotionView, CouponsViewset
 
 router = DefaultRouter()
 router.register("product", ProductViewSet)
+router.register("coupons", CouponsViewset)
+router.register("promotion", ProductPromotionView)
 
 app_name = "product"
 

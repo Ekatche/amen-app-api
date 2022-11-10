@@ -22,6 +22,14 @@ services:
     depends_on:
       - db
 
+  esearch:
+    container_name: search
+    image: elasticsearch:7.17.7
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+
   db:
     image: postgres:13-alpine
     volumes:
