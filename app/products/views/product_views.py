@@ -15,5 +15,5 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     serializer_class = ProductSerializer
     queryset = Product.objects.filter(is_available=True)
-    lookup_field = "slug"
+    lookup_field = "id"
     permission_classes = [ReadOnlyPermission]

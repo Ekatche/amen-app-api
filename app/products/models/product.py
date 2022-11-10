@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from categories.models import Category, SubCategory
+from inventory.models import Inventory
 from .promotion import Promotion
 
 
@@ -25,6 +26,13 @@ class Product(models.Model):
         blank=True,
         null=True,
         verbose_name=_("subcategory"),
+    )
+    inventory = models.OneToOneField(
+        Inventory,
+        related_name="product",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
 
     class Meta:

@@ -1,6 +1,7 @@
 import factory
 from decimal import Decimal
 from factory.django import DjangoModelFactory
+from inventory.factories import InventoryFactory
 from ..models import Promotion, Product, Coupons, Media
 
 
@@ -16,6 +17,7 @@ class ProductFactory(DjangoModelFactory):
     on_promo = False
     price = Decimal("5.50")
     description = "Sample receipe description."
+    inventory = factory.SubFactory(InventoryFactory)
 
 
 class CouponsFactory(DjangoModelFactory):
