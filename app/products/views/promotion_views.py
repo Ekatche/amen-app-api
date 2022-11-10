@@ -3,7 +3,7 @@ Views for promotion app
 """
 
 from rest_framework import viewsets
-from core.permissions import BackofficePermission
+from core.permissions import ReadOnlyPermission
 from ..models import Promotion, Coupons
 from ..serializers import PromotionSerializer, CouponsSerializer
 
@@ -14,7 +14,7 @@ class CouponsViewset(viewsets.ModelViewSet):
     """
 
     serializer_class = CouponsSerializer
-    permission_classes = [BackofficePermission]
+    permission_classes = [ReadOnlyPermission]
     queryset = Coupons.objects.all()
 
 
@@ -24,5 +24,5 @@ class ProductPromotionView(viewsets.ModelViewSet):
     """
 
     serializer_class = PromotionSerializer
-    permission_classes = [BackofficePermission]
+    permission_classes = [ReadOnlyPermission]
     queryset = Promotion.objects.all()

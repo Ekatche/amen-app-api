@@ -2,7 +2,7 @@ from django.contrib import admin
 from .models.product import Product
 from .models.media import Media
 from .models.promotion import Promotion, Coupons
-
+from inventory.admin import InventoryInLine
 
 # Register your models_legacy here.
 
@@ -13,6 +13,23 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ["name", "category", "subcategory"]
     list_editable = ["price", "is_available", "on_promo"]
     prepopulated_fields = {"slug": ("name",)}
+    add_fieldsets = (
+        None,
+        {
+            "classes": ("wide",),
+            "fields": (
+                "name",
+                "slug",
+                "price",
+                "category",
+                "subcategory",
+                "description",
+                "is_available",
+                "on_promo",
+            ),
+        },
+    )
+    inlines = (InventoryInLine,)
 
 
 admin.site.register(Product, ProductAdmin)

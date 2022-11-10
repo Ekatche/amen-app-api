@@ -18,7 +18,7 @@ class Inventory(models.Model):
         default=0, editable=True, blank=False, verbose_name=_("quantity sold")
     )
     total = models.PositiveIntegerField(
-        null=False, default=0, blank=False, verbose_name=_("total quantity produced")
+        null=False, default=0, blank=False, verbose_name=_("total quantity in stock")
     )
     date_created = models.DateTimeField(
         auto_now_add=True, editable=True, verbose_name=_("Date product was created")
