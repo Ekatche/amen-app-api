@@ -3,11 +3,15 @@ Serializers for products APIs
 """
 
 from rest_framework import serializers
-from ..models import Product, Coupons, Promotion, Media
+from ..models import Product, Coupons, Promotion
+from .media_serializer import MediaSerializer
 from categories.serializers import CategorySerializer, SubCategorySerializer
+from inventory.serializers import InventorySerializer
 
 
 class CouponsSerializer(serializers.ModelSerializer):
+    inventory = InventorySerializer(read_only=True)
+
     class Meta:
         model = Coupons
         fields = [
@@ -16,6 +20,7 @@ class CouponsSerializer(serializers.ModelSerializer):
             "code",
             "discount",
             "is_active",
+            "inventory",
             "date_updated",
             "date_created",
         ]
@@ -32,7 +37,8 @@ class PromotionSerializer(serializers.ModelSerializer):
             "period",
             "coupons",
             "date_start",
-            "date_end" "date_updated",
+            "date_end",
+            "date_updated",
             "date_created",
         ]
 
@@ -43,6 +49,8 @@ class ProductSerializer(serializers.ModelSerializer):
     subcategory = SubCategorySerializer(read_only=True)
     category = CategorySerializer(read_only=True)
     promo = PromotionSerializer(read_only=True)
+    image = MediaSerializer(source="images", read_only=True, many=True)
+    product_inventory = InventorySerializer(source="inventory", read_only=True)
 
     class Meta:
         model = Product
@@ -51,7 +59,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "slug",
-            "images",
+            "image",
+            "product_inventory",
             "category",
             "subcategory",
             "description",
@@ -62,11 +71,3 @@ class ProductSerializer(serializers.ModelSerializer):
         lookup_field = "slug"
         read_only_fields = ["id"]
         extra_kwargs = {"url": {"lookup_field": "slug"}}
-
-
-class MediaSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True)
-
-    class Meta:
-        model = Media
-        fields = ["__all__"]

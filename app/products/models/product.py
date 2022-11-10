@@ -10,7 +10,9 @@ class Product(models.Model):
     name = models.CharField(
         max_length=100, null=False, blank=False, verbose_name=_("product name")
     )
-    slug = models.SlugField(max_length=200, db_index=True, default="")
+    slug = models.SlugField(
+        max_length=200, unique=False, blank=False, null=False, db_index=True
+    )
     price = models.DecimalField(decimal_places=2, max_digits=10)
     description = models.TextField()
     is_available = models.BooleanField(default=True)

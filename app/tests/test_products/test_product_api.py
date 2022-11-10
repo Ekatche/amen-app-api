@@ -45,12 +45,12 @@ class PublicProductAPITest(TestCase):
         self.category = Category.objects.create(name="Test category", is_active=True)
 
     def test_auth_required(self):
-        """Test un authenticated user can access products"""
+        """Test unauthenticated user can access products"""
 
         create_product()
 
         res = self.client.get(PRODUCTS_URL)
-        products = Product.objects.all().order_by("-id")
+        products = Product.objects.all().order_by("id")
         serializer = ProductSerializer(products, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
