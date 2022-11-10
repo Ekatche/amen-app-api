@@ -1,9 +1,18 @@
 from django.db import models
+from products.models import Product
 from django.utils.translation import gettext_lazy as _
 
 
 class Inventory(models.Model):
     """Product Inventory model"""
+
+    product = models.OneToOneField(
+        Product,
+        related_name="inventory",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
 
     quantity_sold = models.PositiveIntegerField(
         default=0, editable=True, blank=False, verbose_name=_("quantity sold")

@@ -22,7 +22,7 @@ class PublicCategoriesAPITests(TestCase):
     def test_permissions_needed_categories(self):
         """Test auth required to call api"""
         res = self.client.get(CATEGORY_URLS)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
 
 
 class PrivateCategoriesAPITests(TestCase):
