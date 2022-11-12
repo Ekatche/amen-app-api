@@ -5,16 +5,15 @@ test for models_legacy
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from core.models import BillingAddress, ShippingAddress
-from core.factories import BillingAddressFactory, ShippingAddressFactory, UserFactory
+from core.factories import BillingAddressFactory, ShippingAddressFactory
 
 
 class ModelTests(TestCase):
     """Test models_legacy"""
 
     def setUp(self):
-        user = UserFactory(email="texto@text.com", first_name="tyty", last_name="Test")
-        BillingAddressFactory.create(customer=user)
-        ShippingAddressFactory.create()
+        self.billing = BillingAddressFactory.create()
+        self.shipping = ShippingAddressFactory.create()
 
     def test_create_user_with_email_successful(self):
         email = "testo@example.com"
@@ -52,8 +51,8 @@ class ModelTests(TestCase):
 
     def test_create_billing_address(self):
         billingAddress = BillingAddress.objects.get()
-        self.assertEqual(billingAddress.address, "12 Rue des tests 38300 Tests City")
+        self.assertEqual(billingAddress.address, self.billing.address)
 
     def test_creating_shipping_address(self):
         shippingAddress = ShippingAddress.objects.get()
-        self.assertEqual(shippingAddress.address, "12 Rue des tests 38300 Tests City")
+        self.assertEqual(shippingAddress.address, self.shipping.address)

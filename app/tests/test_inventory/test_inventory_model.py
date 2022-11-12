@@ -11,8 +11,8 @@ class InventoryModelTest(TestCase):
     """
 
     def setUp(self) -> None:
-        self.product = ProductFactory(name="test for inventory")
-        InventoryFactory(product=self.product)
+        self.product = ProductFactory(name="test for inventory", price=10)
+        InventoryFactory(product=self.product, total=45)
 
     def test_create_product_and_get_inventory(self):
         """Test creating a product inventory is successful"""
@@ -20,4 +20,4 @@ class InventoryModelTest(TestCase):
             product=Product.objects.get(name="test for inventory")
         )
         self.assertEqual(str(product.product.name), "test for inventory")
-        self.assertEqual(product.total, 10)
+        self.assertEqual(product.total, 45)

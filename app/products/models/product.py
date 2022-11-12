@@ -33,4 +33,4 @@ class Product(models.Model):
         index_together = (("id", "slug"),)
 
     def __str__(self):
-        return self.name
+        return str(self.id)

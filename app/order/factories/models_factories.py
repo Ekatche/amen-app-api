@@ -21,6 +21,7 @@ class CartItemFactory(DjangoModelFactory):
     product = factory.SubFactory(
         ProductFactory,
     )
+    quantity = factory.Faker("pyint", min_value=1, max_value=5)
 
     cart = factory.SubFactory(
         ShoppingCartFactory,
@@ -35,7 +36,7 @@ class OrderFactory(DjangoModelFactory):
         UserFactory,
     )
     shipping = factory.SubFactory(ShippingAddressFactory)
-    amount_due = 10
+    amount_due = factory.Faker("pyint", min_value=5, max_value=100)
 
 
 class OrderItemFactory(DjangoModelFactory):
@@ -44,4 +45,4 @@ class OrderItemFactory(DjangoModelFactory):
 
     product = factory.SubFactory(ProductFactory)
     order = factory.SubFactory(OrderFactory)
-    quantity = 2
+    quantity = factory.Faker("pyint", min_value=1, max_value=5)

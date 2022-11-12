@@ -33,7 +33,7 @@ class Inventory(models.Model):
         return self.total - self.quantity_sold
 
     def __str__(self):
-        return self.product
+        return str(self.id)
 
     class Meta:
         ordering = ["date_created"]
