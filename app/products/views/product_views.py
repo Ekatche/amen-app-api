@@ -29,7 +29,9 @@ class ProductViewSet(
         or subcategory
         """
         if category_name:
-            queryset = Product.objects.filter(category__name=category_name)
+            queryset = Product.objects.filter(is_available=True).filter(
+                category__name=category_name
+            )
             serializer = self.serializer_class(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         elif sub_category:

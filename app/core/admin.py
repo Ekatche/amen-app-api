@@ -45,3 +45,51 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
+
+
+class ShippingAddressAdmin(admin.ModelAdmin):
+    ordering = ["id"]
+    list_display = ["id", "customer", "building_number", "street", "city", "postcode"]
+    add_fieldsets = (
+        (
+            None,
+            {
+                # wide make the page better
+                "classes": ("wide",),
+                "fields": (
+                    "customer",
+                    "building_number",
+                    "street",
+                    "city",
+                    "postcode",
+                ),
+            },
+        ),
+    )
+
+
+admin.site.register(models.ShippingAddress, ShippingAddressAdmin)
+
+
+class BillingAddressAdmin(admin.ModelAdmin):
+    ordering = ["id"]
+    list_display = ["id", "customer", "building_number", "street", "city", "postcode"]
+    add_fieldsets = (
+        (
+            None,
+            {
+                # wide make the page better
+                "classes": ("wide",),
+                "fields": (
+                    "customer",
+                    "building_number",
+                    "street",
+                    "city",
+                    "postcode",
+                ),
+            },
+        ),
+    )
+
+
+admin.site.register(models.BillingAddress, BillingAddressAdmin)

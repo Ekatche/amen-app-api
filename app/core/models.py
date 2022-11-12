@@ -90,7 +90,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class ShippingAddress(models.Model):
     customer = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="shippingaddress",
         null=True,
         blank=True,
@@ -139,7 +139,7 @@ class ShippingAddress(models.Model):
 class BillingAddress(models.Model):
     customer = models.ForeignKey(
         User,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="billingaddress",
         null=True,
         blank=True,

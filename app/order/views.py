@@ -11,7 +11,7 @@ from .models import ShoppingCart, Order, CartItem, OrderItem
 from core.models import User
 from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from core.permissions import IsAuthenticatedAndReadOnlyPermission
 from rest_framework.authentication import TokenAuthentication
 
 from django.db.models import FloatField
@@ -26,7 +26,7 @@ class ShoppongcartViewset(viewsets.ModelViewSet):
 
     queryset = ShoppingCart.objects.all()
     serializer_class = ShoppingCartSerializer
-    authentication_classes = [IsAuthenticated]
+    authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
     permission_classes = [TokenAuthentication]
 
     def get_queryset(self):
@@ -138,7 +138,7 @@ class CartItemViewSet(viewsets.ModelViewSet):
 
     queryset = CartItem.objects.all()
     serializer_class = CartItemSerializer
-    authentication_classes = [IsAuthenticated]
+    authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
     permission_classes = [TokenAuthentication]
 
     def get_queryset(self):
@@ -155,7 +155,7 @@ class OrderViewset(viewsets.ModelViewSet):
     """
 
     # to place an order the user must be connected
-    authentication_classes = [IsAuthenticated]
+    authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
     permission_classes = [TokenAuthentication]
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
@@ -273,7 +273,7 @@ class OrderItemViewSet(viewsets.ModelViewSet):
     API endpoint that allows order items to be viewed or edited.
     """
 
-    authentication_classes = [IsAuthenticated]
+    authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
     permission_classes = [TokenAuthentication]
     serializer_class = OrderItemSerializer
     queryset = OrderItem.objects.all()

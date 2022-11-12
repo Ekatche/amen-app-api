@@ -16,7 +16,7 @@ class Coupons(models.Model):
     code = models.CharField(
         max_length=50,
         unique=True,
-        help_text="Voucher code (keep confidential). Must be unique.",
+        help_text="Coupons code (keep confidential). Must be unique.",
     )
 
     discount = models.IntegerField(

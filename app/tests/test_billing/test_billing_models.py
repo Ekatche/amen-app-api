@@ -5,8 +5,8 @@ from billing.models import Invoice
 
 class InvoiceModelTest(TestCase):
     def setUp(self) -> None:
-        InvoiceFactory.create()
-        InvoiceFactory.create()
+        InvoiceFactory()
+        InvoiceFactory()
 
     def test_invoice_creation(self):
         invoice = Invoice.objects.all()

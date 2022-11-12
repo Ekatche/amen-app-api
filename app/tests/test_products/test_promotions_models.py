@@ -30,7 +30,7 @@ class PromotionModelTest(TestCase):
     def test_create_coupons_and_associate_to_promo(self):
         """Test creating coupons associated with coupons"""
         # coupons attached to promotion
-        promo = PromotionFactory()
+        promo = PromotionFactory(name="OCTOBERTEST22", coupons=self.coupons)
 
         self.assertEqual(promo.name, "OCTOBERTEST22")
-        self.assertEqual(promo.coupons.name, "TRENTEPOURCENTS")
+        self.assertEqual(promo.coupons.name, "ThirtyPercent")

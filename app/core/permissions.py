@@ -51,3 +51,11 @@ class ReadOnlySalesBackofficePermission(BackofficePermission):
 class ReadOnlyPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.method in permissions.SAFE_METHODS
+
+
+class IsAuthenticatedAndReadOnlyPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not (
+            request.method not in permissions.SAFE_METHODS
+            and request.user.is_authenticated
+        )

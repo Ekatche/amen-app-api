@@ -20,4 +20,4 @@ class ProductModelTests(TestCase):
             price=Decimal("5.50"),
             description="Sample receipe description.",
         )
-        self.assertEqual(str(product), product.name)
+        self.assertEqual(str(product), str(product.id))

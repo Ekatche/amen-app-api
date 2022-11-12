@@ -10,14 +10,14 @@ from order.factories import (
 
 class OrderModelTest(TestCase):
     def setUp(self) -> None:
-        OrderItemFactory.create()
-        OrderItemFactory.create()
-        OrderFactory.create()
-        OrderFactory.create()
-        ShoppingCartFactory.create()
-        ShoppingCartFactory.create()
-        CartItemFactory.create()
-        CartItemFactory.create()
+        OrderItemFactory()
+        OrderItemFactory()
+        OrderFactory()
+        OrderFactory()
+        ShoppingCartFactory()
+        ShoppingCartFactory()
+        CartItemFactory()
+        CartItemFactory()
 
     def test_create_order(self):
         order = Order.objects.all()

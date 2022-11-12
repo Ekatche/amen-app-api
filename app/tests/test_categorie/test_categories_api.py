@@ -34,10 +34,10 @@ class PrivateCategoriesAPITests(TestCase):
         self.client = APIClient()
         self.user = UserAdminFactory()
         self.client.force_authenticate(self.user)
-        SubCategoryFactory()
-        SubCategoryFactory()
-        CategoryFactory()
-        CategoryFactory()
+        self.cat1 = CategoryFactory(slug="gaga")
+        self.cat2 = CategoryFactory(slug="BOBO")
+        SubCategoryFactory(category=self.cat1)
+        SubCategoryFactory(category=self.cat2)
 
     def test_retrieve_categories(self):
         res = self.client.get(CATEGORY_URLS)

@@ -34,8 +34,8 @@ class PivrateInventoryAPITests(TestCase):
         self.client.force_authenticate(self.user)
 
     def test_retrieving_inventory(self):
-        InventoryFactory.create()
-        InventoryFactory.create()
+        InventoryFactory()
+        InventoryFactory()
 
         res = self.client.get(INVENTORY_URLS)
         inventory = Inventory.objects.all().order_by("id")
