@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# defining environment variables
+ENVIRONMENT = os.environ["ENVIRONMENT"]
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -157,6 +160,13 @@ INTERNAL_IPS = [
     # ...
 ]
 
-ELASTICSEARCH_DSL = {
-    "default": {"hosts": "elasticsearch"},
-}
+if ENVIRONMENT.lower() not in ["dev", "test", "prod"]:
+    ELASTICSEARCH_DSL = {
+        "default": {"hosts": "elasticsearch"},
+    }
+else:
+    ELASTICSEARCH_DSL = {
+        "default": {"hosts": "localhost:9200"},
+    }
+
+
