@@ -4,14 +4,14 @@ Serializers for products APIs
 
 from rest_framework import serializers
 from ..models import Product, Coupons, Promotion
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+from documents import ProductDocument
 from .media_serializer import MediaSerializer
 from categories.serializers import CategorySerializer, SubCategorySerializer
 from inventory.serializers import InventorySerializer
 
 
 class CouponsSerializer(serializers.ModelSerializer):
-    inventory = InventorySerializer(read_only=True)
-
     class Meta:
         model = Coupons
         fields = [
@@ -20,9 +20,6 @@ class CouponsSerializer(serializers.ModelSerializer):
             "code",
             "discount",
             "is_active",
-            "inventory",
-            "date_updated",
-            "date_created",
         ]
 
 
@@ -38,8 +35,6 @@ class PromotionSerializer(serializers.ModelSerializer):
             "coupons",
             "date_start",
             "date_end",
-            "date_updated",
-            "date_created",
         ]
 
 
@@ -71,3 +66,23 @@ class ProductSerializer(serializers.ModelSerializer):
         lookup_field = "slug"
         read_only_fields = ["id"]
         extra_kwargs = {"url": {"lookup_field": "slug"}}
+
+
+class ProductSearchSerializer(DocumentSerializer):
+    class Meta:
+        document = ProductDocument
+
+        fields = [
+            "id",
+            "name",
+            "price",
+            "slug",
+            "images",
+            "inventory",
+            "category",
+            "subcategory",
+            "description",
+            "is_available",
+            "on_promo",
+            "promo",
+        ]

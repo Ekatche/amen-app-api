@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "drf_spectacular",
     "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
     # Internal config
     "core",
     "user",
@@ -139,7 +140,11 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.User"
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
+}
 
 # django paypal settings
 
@@ -151,8 +156,7 @@ INTERNAL_IPS = [
     "127.0.0.1",
     # ...
 ]
-# REST_FRAMEWORK = {
-#    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#    'PAGE_SIZE': 100
-# }
-ELASTICSEARCH_DSL = {"default": {"host": "localhost:9200"}}
+
+ELASTICSEARCH_DSL = {
+    "default": {"hosts": "elasticsearch"},
+}

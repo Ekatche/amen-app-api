@@ -15,6 +15,4 @@ class InventorySerializer(serializers.ModelSerializer):
             "quantity_sold",
             "total",
             "available_quantity",
-            "date_created",
-            "date_updated",
         ]

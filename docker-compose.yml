@@ -22,11 +22,14 @@ services:
     depends_on:
       - db
 
-  esearch:
+  elasticsearch:
     container_name: search
     image: elasticsearch:7.17.7
     environment:
       - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
     ports:
       - "9200:9200"
 
