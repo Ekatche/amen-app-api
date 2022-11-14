@@ -160,13 +160,10 @@ INTERNAL_IPS = [
     # ...
 ]
 
-if ENVIRONMENT.lower() not in ["dev", "test", "prod"]:
+if ENVIRONMENT.lower() in ["local"]:
     ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
     }
-else:
-    ELASTICSEARCH_DSL = {
-        "default": {"hosts": "localhost:9200"},
-    }
+
 
 
