@@ -176,12 +176,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-if ENVIRONMENT.lower() in ["local"]:
-    ELASTICSEARCH_DSL = {
+ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
-    }
-
-if ENVIRONMENT.lower() in ['dev', 'preprod', 'prod']:
-    ELASTICSEARCH_DSL = {
-        "default": {"host": "localhost", "port": 9200},
     }
