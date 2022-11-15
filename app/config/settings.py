@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
-ENVIRONMENT = os.environ["ENVIRONMENT"]
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,6 +22,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
 
+# defining environment variables
+ENVIRONMENT = os.environ["ENVIRONMENT"]
+
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT.lower() in ["local"]:
     DEBUG = True
@@ -31,9 +32,6 @@ else:
     DEBUG = False
 
 ALLOWED_HOSTS = []
-
-# defining environment variables
-
 
 # Application definition
 
@@ -60,8 +58,21 @@ INSTALLED_APPS = [
     "order",
     "billing",
     # developemnt
-    "debug_toolbar",
+
 ]
+
+
+def _enable_conditional(application):
+    global INSTALLED_APPS
+    try:
+        __import__(application)
+        INSTALLED_APPS += (application,)
+    except ImportError:
+        pass
+
+
+if ENVIRONMENT.lower() in ['local']:
+    _enable_conditional('debug_toolbar')
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -168,7 +179,6 @@ if ENVIRONMENT.lower() in ["local"]:
         "default": {"hosts": "elasticsearch"},
     }
 if ENVIRONMENT.lower() in ['dev']:
-
     ELASTICSEARCH_DSL = {
-            "default": {"host": "localhost", "port": 9200},
-        }
+        "default": {"host": "localhost", "port": 9200},
+    }
