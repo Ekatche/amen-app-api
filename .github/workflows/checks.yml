@@ -15,13 +15,6 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: elasticsearch
-        uses : getong/elasticsearch-action@v1.2
-        with :
-          elasticsearch version: '7.17.7'
-          host port: 9200
-          container port: 9200
-          discovery type: 'single-node'
       - name: Wait for db
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db"
       - name : Wait for es
