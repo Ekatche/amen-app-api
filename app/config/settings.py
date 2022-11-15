@@ -160,9 +160,7 @@ PAYPAL_RECEIVER_EMAIL = ""
 PAYPAL_TEST = True
 
 INTERNAL_IPS = [
-    # ...
     "127.0.0.1",
-    # ...
 ]
 
 if ENVIRONMENT.lower() in ["local"]:
