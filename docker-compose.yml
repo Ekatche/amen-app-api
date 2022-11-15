@@ -8,10 +8,12 @@ services:
         - DEV=true
     ports:
       - "8000:8000"
+      - "9200:9200"
     volumes:
       - ./app:/app
     command: >
       sh -c "python manage.py wait_for_db &&
+             python manage.py wait_for_es &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     environment:
@@ -21,14 +23,23 @@ services:
       - DB_PASS=change
     depends_on:
       - db
+      - elasticsearch
 
-  esearch:
+  elasticsearch:
     container_name: search
     image: elasticsearch:7.17.7
     environment:
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
       - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
     ports:
       - "9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
   db:
     image: postgres:13-alpine
@@ -41,3 +52,5 @@ services:
 
 volumes:
   dev-db-data:
+  esdata:
+

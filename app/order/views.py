@@ -19,7 +19,7 @@ from django.db.models import F
 from django.db.models import Sum
 
 
-class ShoppongcartViewset(viewsets.ModelViewSet):
+class ShoppingcartViewset(viewsets.ModelViewSet):
     """
     API endpoint that allows carts to be viewed or edited.
     """

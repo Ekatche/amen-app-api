@@ -20,10 +20,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
+SECRET_KEY = os.environ["DJANGOKEY"]
+
+# defining environment variables
+ENVIRONMENT = "local"
+if "ENVIRONMENT" in os.environ:
+    ENVIRONMENT = os.environ["ENVIRONMENT"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if ENVIRONMENT.lower() in ["local"]:
+    DEBUG = False
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -42,6 +50,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "drf_spectacular",
     "django_elasticsearch_dsl",
+    "django_elasticsearch_dsl_drf",
     # Internal config
     "core",
     "user",
@@ -51,8 +60,21 @@ INSTALLED_APPS = [
     "order",
     "billing",
     # developemnt
-    "debug_toolbar",
+
 ]
+
+
+def _enable_conditional(application):
+    global INSTALLED_APPS
+    try:
+        __import__(application)
+        INSTALLED_APPS += (application,)
+    except ImportError:
+        pass
+
+
+#if ENVIRONMENT.lower() in ['local']:
+#    _enable_conditional('debug_toolbar')
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -139,7 +161,11 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.User"
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema"}
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 100,
+}
 
 # django paypal settings
 
@@ -147,12 +173,9 @@ PAYPAL_RECEIVER_EMAIL = ""
 PAYPAL_TEST = True
 
 INTERNAL_IPS = [
-    # ...
     "127.0.0.1",
-    # ...
 ]
-# REST_FRAMEWORK = {
-#    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#    'PAGE_SIZE': 100
-# }
-ELASTICSEARCH_DSL = {"default": {"host": "localhost:9200"}}
+
+ELASTICSEARCH_DSL = {
+        "default": {"hosts": "elasticsearch"},
+    }

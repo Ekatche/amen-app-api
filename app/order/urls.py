@@ -8,11 +8,11 @@ from django.urls import (
 )
 
 from rest_framework.routers import DefaultRouter
-from .views import OrderViewset, ShoppongcartViewset
+from .views import OrderViewset, ShoppingcartViewset
 
 router = DefaultRouter()
 router.register("order", OrderViewset, basename="order")
-router.register("shoppingcart", ShoppongcartViewset, basename="order")
+router.register("shoppingcart", ShoppingcartViewset, basename="order")
 
 app_name = "order"
 
