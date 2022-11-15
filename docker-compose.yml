@@ -20,7 +20,7 @@ services:
       - DB_NAME=dev_db
       - DB_USER=dev_user
       - DB_PASS=change
-      - DJANGO_KEY ="django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
+      - DJANGOKEY=django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83
     depends_on:
       - db
       - elasticsearch
