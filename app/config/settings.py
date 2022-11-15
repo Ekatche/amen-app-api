@@ -164,3 +164,7 @@ if ENVIRONMENT.lower() in ["local"]:
     ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
     }
+
+ELASTICSEARCH_DSL = {
+        "default": {"hosts": "localhost:9200"},
+    }
