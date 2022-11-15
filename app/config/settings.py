@@ -20,14 +20,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
+SECRET_KEY = os.environ["DJANGO_KEY"]
 
 # defining environment variables
-ENVIRONMENT = os.environ["ENVIRONMENT"]
+ENVIRONMENT = "local"
+if "ENVIRONMENT" in os.environ:
+    ENVIRONMENT = os.environ["ENVIRONMENT"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT.lower() in ["local"]:
-    DEBUG = True
+    DEBUG = False
 else:
     DEBUG = False
 
@@ -71,8 +73,8 @@ def _enable_conditional(application):
         pass
 
 
-if ENVIRONMENT.lower() in ['local']:
-    _enable_conditional('debug_toolbar')
+#if ENVIRONMENT.lower() in ['local']:
+#    _enable_conditional('debug_toolbar')
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -178,7 +180,8 @@ if ENVIRONMENT.lower() in ["local"]:
     ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
     }
-if ENVIRONMENT.lower() in ['dev']:
+
+if ENVIRONMENT.lower() in ['dev', 'preprod', 'prod']:
     ELASTICSEARCH_DSL = {
         "default": {"host": "localhost", "port": 9200},
     }
