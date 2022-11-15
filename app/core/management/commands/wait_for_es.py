@@ -21,11 +21,8 @@ def isrunning():
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-
         self.stdout.write("Waiting for Elasticsearch cluster...")
-
         Elasticsearch(hosts=[{"host": "elasticsearch", "port": 9200}])
-
         connected = False
         while not connected:
             try:
@@ -34,5 +31,4 @@ class Command(BaseCommand):
             except Exception:
                 self.stdout.write("Cluster not available yet ...")
                 time.sleep(1)
-
         self.stdout.write(self.style.SUCCESS("Cluster available!"))

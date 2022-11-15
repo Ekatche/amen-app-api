@@ -2,8 +2,7 @@ FROM python:3.9-alpine3.13
 LABEL maintainer="amen-fragance.com"
 
 ENV PYTHONUNBUFFERED 1
-ENV ENVIRONMENT = "dev"
-ENV DJANGO_KEY ="django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
+ENV DJANGOKEY "django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 COPY ./app /app
@@ -28,5 +27,4 @@ RUN python -m venv /py && \
         django-user
 
 ENV PATH="/py/bin:$PATH"
-
 USER django-user

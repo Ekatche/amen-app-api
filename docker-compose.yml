@@ -8,6 +8,7 @@ services:
         - DEV=true
     ports:
       - "8000:8000"
+      - "9200:9200"
     volumes:
       - ./app:/app
     command: >
@@ -20,7 +21,6 @@ services:
       - DB_NAME=dev_db
       - DB_USER=dev_user
       - DB_PASS=change
-      - DJANGOKEY=django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83
     depends_on:
       - db
       - elasticsearch
@@ -29,6 +29,8 @@ services:
     container_name: search
     image: elasticsearch:7.17.7
     environment:
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - xpack.security.enabled=false
@@ -37,6 +39,7 @@ services:
       - "9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
   db:
     image: postgres:13-alpine
