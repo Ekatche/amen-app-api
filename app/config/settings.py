@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+ENVIRONMENT = os.environ["ENVIRONMENT"]
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,12 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-juq&y2gde9u^==vhj9y4^0-z-bxk#(+a5^h5a9^7dx5(^z$y83"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if ENVIRONMENT.lower() in ["local"]:
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = []
 
 # defining environment variables
-ENVIRONMENT = os.environ["ENVIRONMENT"]
+
 
 # Application definition
 
