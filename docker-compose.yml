@@ -23,7 +23,7 @@ services:
       - DB_PASS=change
     depends_on:
       - db
-      - elasticsearch
+
 
   elasticsearch:
     container_name: search
