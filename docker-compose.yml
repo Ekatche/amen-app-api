@@ -23,6 +23,7 @@ services:
       - ENVIRONMENT=local
     depends_on:
       - db
+      - elasticsearch
 
   elasticsearch:
     container_name: search
