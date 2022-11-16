@@ -29,7 +29,7 @@ if "ENVIRONMENT" in os.environ:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT.lower() in ["local"]:
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = False
 
@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     "order",
     "billing",
     # developemnt
-
 ]
 
 
@@ -73,7 +72,7 @@ def _enable_conditional(application):
         pass
 
 
-#if ENVIRONMENT.lower() in ['local']:
+# if ENVIRONMENT.lower() in ['local']:
 #    _enable_conditional('debug_toolbar')
 
 MIDDLEWARE = [
@@ -176,6 +175,11 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-ELASTICSEARCH_DSL = {
+if ENVIRONMENT.lower() in ["local"]:
+    ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
+    }
+else:
+    ELASTICSEARCH_DSL = {
+        "default": {"host": "localhost:9200"},
     }

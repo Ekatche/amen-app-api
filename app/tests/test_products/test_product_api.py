@@ -11,6 +11,10 @@ from rest_framework.test import APIClient
 from core.factories import UserAdminFactory
 from products.models import Product
 from categories.models import Category
+from products.factories import (
+    ProductFactory,
+)
+from categories.factories import SubCategoryFactory, CategoryFactory
 
 # from products.serializers import ProductSerializer
 
@@ -76,3 +80,21 @@ class PrivateProductApiTest(TestCase):
         # products = Product.objects.all().order_by("id")
         # serializer = ProductSerializer(products, many=True)
         # self.assertEqual(res.data, serializer.data)
+
+    def test_retrieve_product_by_sub_category(self):
+        subcategory = SubCategoryFactory()
+        product = ProductFactory(subcategory=subcategory)
+        link = f"/api/product/product/?subcategory_name={product.subcategory.name}"
+        res = self.client.get(link)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["results"][0]["name"], product.name)
+
+    def test_retrieve_product_by_category(self):
+        category = CategoryFactory(name="test_VTF")
+        product = ProductFactory(categories=(category,))
+        link = f"/api/product/product/?category_name={category.name}"
+        res = self.client.get(link)
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data["results"][0]["name"], product.name)

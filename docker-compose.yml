@@ -8,7 +8,6 @@ services:
         - DEV=true
     ports:
       - "8000:8000"
-      - "9200:9200"
     volumes:
       - ./app:/app
     command: >
@@ -23,23 +22,22 @@ services:
       - DB_PASS=change
     depends_on:
       - db
+      - elasticsearch
 
 
   elasticsearch:
     container_name: search
     image: elasticsearch:7.17.7
     environment:
-      - http.host=0.0.0.0
-      - transport.host=0.0.0.0
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - xpack.security.enabled=false
       - ES_JAVA_OPTS=-Xms256m -Xmx256m
     ports:
       - "9200:9200"
     volumes:
-      - esdata:/usr/share/elasticsearch/data
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    depends_on:
+      - db
 
   db:
     image: postgres:13-alpine
@@ -52,5 +50,4 @@ services:
 
 volumes:
   dev-db-data:
-  esdata:
 

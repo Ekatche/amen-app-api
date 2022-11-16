@@ -31,7 +31,7 @@ class ProductViewSet(
     def retrieve(self, request, id=None, category_name=None, sub_category=None):
         """
         API to retrieve product based on category
-        or subcategory
+        or subcategory or id
         """
         if category_name:
             queryset = Product.objects.filter(is_available=True).filter(

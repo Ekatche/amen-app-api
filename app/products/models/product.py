@@ -20,7 +20,7 @@ class Product(models.Model):
     promo = models.ForeignKey(
         Promotion, blank=True, null=True, on_delete=models.PROTECT
     )
-    category = models.ManyToManyField(Category, related_name="product")
+    categories = models.ManyToManyField(Category, related_name="product")
     subcategory = models.ForeignKey(
         SubCategory,
         on_delete=models.PROTECT,

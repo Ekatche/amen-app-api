@@ -42,7 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
     """Serializer for product"""
 
     subcategory = SubCategorySerializer(read_only=True)
-    category = CategorySerializer(read_only=True)
+    categories = CategorySerializer(read_only=True, many=True)
     promo = PromotionSerializer(read_only=True)
     image = MediaSerializer(source="images", read_only=True, many=True)
     product_inventory = InventorySerializer(source="inventory", read_only=True)
@@ -56,7 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "slug",
             "image",
             "product_inventory",
-            "category",
+            "categories",
             "subcategory",
             "description",
             "is_available",
@@ -79,7 +79,7 @@ class ProductSearchSerializer(DocumentSerializer):
             "slug",
             "images",
             "inventory",
-            "category",
+            "categories",
             "subcategory",
             "description",
             "is_available",

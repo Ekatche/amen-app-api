@@ -18,7 +18,7 @@ router = DefaultRouter()
 router.register("product", ProductViewSet)
 router.register("coupons", CouponsViewset)
 router.register("promotion", ProductPromotionView)
-router.register("search", SearchProductView, basename="searchproduct")
+router.register("search", SearchProductView, basename="search-product")
 
 app_name = "product"
 
