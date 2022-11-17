@@ -32,8 +32,8 @@ services:
       - "9200:9200"
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-    depends_on:
-      - app
+    environment:
+      - ES_PORT=9200
 
 
   db:
