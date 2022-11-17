@@ -3,15 +3,28 @@ from .models.product import Product
 from .models.media import Media
 from .models.promotion import Promotion, Coupons
 from inventory.admin import InventoryInLine
+from .tasks import promotion_price, promotion_management
+
 
 # Register your models_legacy here.
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "slug", "subcategory", "price", "is_available", "on_promo"]
+    model = Product
+    list_display = [
+        "name",
+        "slug",
+        "subcategory",
+        "price",
+        "is_available",
+        "on_promo",
+        "promo",
+        "promo_price",
+    ]
     list_filter = ["is_available", "on_promo"]
     search_fields = ["name", "category", "subcategory"]
-    list_editable = ["price", "is_available", "on_promo"]
+    list_editable = ["price", "is_available", "on_promo", "promo"]
+    inlines = (InventoryInLine,)
     prepopulated_fields = {"slug": ("name",)}
     add_fieldsets = (
         None,
@@ -29,7 +42,10 @@ class ProductAdmin(admin.ModelAdmin):
             ),
         },
     )
-    inlines = (InventoryInLine,)
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        promotion_price.delay(obj.promo.coupons.discount, obj.promo.id)
 
 
 admin.site.register(Product, ProductAdmin)
@@ -51,10 +67,17 @@ class PromotionAdmin(admin.ModelAdmin):
         "date_updated",
         "period",
         "coupons",
+        "is_active",
+        "is_schedule",
+        "date_start",
         "date_end",
     ]
     list_filter = ["date_created", "date_updated"]
     search_fields = ["name"]
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        promotion_management.delay()
 
 
 admin.site.register(Promotion, PromotionAdmin)

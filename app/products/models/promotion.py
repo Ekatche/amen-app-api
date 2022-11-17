@@ -47,11 +47,16 @@ class Promotion(models.Model):
     )
 
     coupons = models.ForeignKey(
-        Coupons, null=True, blank=True, on_delete=models.PROTECT
+        Coupons,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="promotion",
     )
     date_start = models.DateField(null=True, blank=True)
-
     date_end = models.DateField(null=True, blank=True)
+    is_active = models.BooleanField(default=False)
+    is_schedule = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

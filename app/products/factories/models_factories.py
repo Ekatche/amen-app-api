@@ -18,11 +18,11 @@ class ProductFactory(DjangoModelFactory):
     is_available = True
     on_promo = False
     price = factory.Faker("pyint", min_value=5, max_value=100)
-    description = fake.text()
+    description = factory.Faker("sentence")
     subcategory = factory.SubFactory(SubCategoryFactory)
 
     @factory.post_generation
-    def category(self, create, extracted, **kwargs):
+    def categories(self, create, extracted, **kwargs):
         if not create:
             # Simple build, do nothing.
             return
@@ -30,14 +30,14 @@ class ProductFactory(DjangoModelFactory):
         if extracted:
             # A list of category were passed in, use them
             for category in extracted:
-                self.category.add(category)
+                self.categories.add(category)
 
 
 class MediaFactory(DjangoModelFactory):
     class Meta:
         model = Media
 
-    image = "image/default.png"
+    image = factory.Faker("image_url")
     product = factory.SubFactory(ProductFactory)
 
 
@@ -59,6 +59,9 @@ class PromotionFactory(DjangoModelFactory):
     name = fuzzy.FuzzyText(length=12, prefix="PROMO")
     period = factory.Faker("pyint", min_value=2, max_value=5)
     coupons = factory.SubFactory(CouponsFactory)
+    date_start = factory.Faker("past_datetime")
+    date_end = factory.Faker("future_datetime")
+    is_schedule = True
 
 
 class ProductWithPromoFactory(DjangoModelFactory):

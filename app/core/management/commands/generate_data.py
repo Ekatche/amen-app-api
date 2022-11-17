@@ -84,7 +84,7 @@ class Command(BaseCommand):
             cat = CategoryFactory()
             subcategory = SubCategoryFactory(category=cat)
             for _ in range(NUM_PRODUCT):
-                product = ProductFactory(subcategory=subcategory, category=[cat])
+                product = ProductFactory(subcategory=subcategory, categories=(cat,))
                 InventoryFactory(product=product)
                 MediaFactory(product=product)
                 products.append(product)

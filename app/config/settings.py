@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["DJANGOKEY"]
+SECRET_KEY = os.environ.get("DJANGOKEY")
 
 # defining environment variables
 ENVIRONMENT = "local"
@@ -29,7 +30,7 @@ if "ENVIRONMENT" in os.environ:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if ENVIRONMENT.lower() in ["local"]:
-    DEBUG = False
+    DEBUG = True
 else:
     DEBUG = False
 
@@ -60,7 +61,6 @@ INSTALLED_APPS = [
     "order",
     "billing",
     # developemnt
-
 ]
 
 
@@ -73,7 +73,7 @@ def _enable_conditional(application):
         pass
 
 
-#if ENVIRONMENT.lower() in ['local']:
+# if ENVIRONMENT.lower() in ['local']:
 #    _enable_conditional('debug_toolbar')
 
 MIDDLEWARE = [
@@ -176,6 +176,21 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-ELASTICSEARCH_DSL = {
+if ENVIRONMENT.lower() in ["local"]:
+    ELASTICSEARCH_DSL = {
         "default": {"hosts": "elasticsearch"},
     }
+else:
+    ELASTICSEARCH_DSL = {
+        "default": {"host": "localhost:9200"},
+    }
+
+CELERY_BROKER_URL = "redis://redis:6379"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "app.products.promotion_management",
+        "schedule": crontab(minute="0", hour="1"),
+    },
+}

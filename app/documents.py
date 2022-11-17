@@ -1,6 +1,17 @@
 from django_elasticsearch_dsl.registries import registry
 from django_elasticsearch_dsl import Document, fields
-from products.models import Product
+from elasticsearch_dsl import analyzer
+from products.models import Product, Promotion, Media
+from categories.models import Category
+from inventory.models import Inventory
+
+
+html_strip = analyzer(
+    "html_strip",
+    tokenizer="standard",
+    filter=["standard", "lowercase", "stop", "snowball"],
+    char_filter=["html_strip"],
+)
 
 
 @registry.register_document
@@ -11,23 +22,33 @@ class ProductDocument(Document):
             "quantity_sold": fields.IntegerField(),
             "total": fields.IntegerField(),
             "available_quantity": fields.IntegerField(attr="get_available_quatity"),
-        }
+        },
+        attr="inventory",
     )
 
-    category = fields.ObjectField(
+    categories = fields.ObjectField(
         properties={
             "id": fields.IntegerField(),
             "name": fields.TextField(),
             "slug": fields.TextField(),
             "is_active": fields.BooleanField(),
-        }
+        },
+        attr="categories",
+        multi=True,
     )
 
     subcategory = fields.NestedField(
         properties={
             "id": fields.IntegerField(),
             "name": fields.TextField(),
-            "category": category,
+            "category": fields.ObjectField(
+                properties={
+                    "id": fields.IntegerField(),
+                    "name": fields.TextField(),
+                    "slug": fields.TextField(),
+                    "is_active": fields.BooleanField(),
+                }
+            ),
         }
     )
     promo = fields.NestedField(
@@ -53,7 +74,9 @@ class ProductDocument(Document):
             "id": fields.IntegerField(),
             "image": fields.FileField(),
             "is_feature": fields.BooleanField(),
-        }
+        },
+        attr="images",
+        multi=True,
     )
 
     class Index:
@@ -70,4 +93,21 @@ class ProductDocument(Document):
             "description",
             "is_available",
             "on_promo",
+            "promo_price",
         ]
+        related_models = [Category, Inventory, Media, Promotion]
+
+    def get_instances_from_related(self, related_instance):
+        """
+        If related_models is set, define how to retrieve the product instance(s)
+        from the related model. The related_models option should be used with
+        caution because it can lead in the index to the updating of a lot of items.
+        """
+        if isinstance(related_instance, Category):
+            return related_instance.product.all()
+        elif isinstance(related_instance, Inventory):
+            return related_instance.product
+        elif isinstance(related_instance, Media):
+            return related_instance.product
+        elif isinstance(related_instance, Promotion):
+            return related_instance.product.all()
