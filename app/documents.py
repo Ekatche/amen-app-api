@@ -93,5 +93,21 @@ class ProductDocument(Document):
             "description",
             "is_available",
             "on_promo",
+            "promo_price",
         ]
         related_models = [Category, Inventory, Media, Promotion]
+
+    def get_instances_from_related(self, related_instance):
+        """
+        If related_models is set, define how to retrieve the product instance(s)
+        from the related model. The related_models option should be used with
+        caution because it can lead in the index to the updating of a lot of items.
+        """
+        if isinstance(related_instance, Category):
+            return related_instance.product.all()
+        elif isinstance(related_instance, Inventory):
+            return related_instance.product
+        elif isinstance(related_instance, Media):
+            return related_instance.product
+        elif isinstance(related_instance, Promotion):
+            return related_instance.product.all()

@@ -15,8 +15,6 @@ jobs:
           bootstrap.memory_lock: true
         ports:
           - 9200:9200
-        environment:
-            - bootstrap.memory_lock=false
 
         options: >-
           --health-cmd "curl http://localhost:9200/_cluster/health"

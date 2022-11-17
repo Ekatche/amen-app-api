@@ -18,7 +18,14 @@ class Product(models.Model):
     is_available = models.BooleanField(default=True)
     on_promo = models.BooleanField(default=False)
     promo = models.ForeignKey(
-        Promotion, blank=True, null=True, on_delete=models.PROTECT
+        Promotion,
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
+        related_name="product",
+    )
+    promo_price = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True, blank=True, default=0
     )
     categories = models.ManyToManyField(Category, related_name="product")
     subcategory = models.ForeignKey(

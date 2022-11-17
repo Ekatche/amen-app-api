@@ -16,3 +16,7 @@ elasticsearch==7.17.7
 django-elasticsearch-dsl>=7.0.0,<8.0.0
 django-elasticsearch-dsl-drf>=0.22.2,<0.22.3
 Faker==9.5.2
+celery==5.2.7
+redis==4.2.0
+flower ==1.0.0
+vine==5.0.0

@@ -59,6 +59,9 @@ class PromotionFactory(DjangoModelFactory):
     name = fuzzy.FuzzyText(length=12, prefix="PROMO")
     period = factory.Faker("pyint", min_value=2, max_value=5)
     coupons = factory.SubFactory(CouponsFactory)
+    date_start = factory.Faker("past_datetime")
+    date_end = factory.Faker("future_datetime")
+    is_schedule = True
 
 
 class ProductWithPromoFactory(DjangoModelFactory):
