@@ -33,8 +33,7 @@ services:
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
-      - ES_PORT=9200
-
+      - ELASTICSEARCH_PORT=9200
 
   db:
     image: postgres:13-alpine
