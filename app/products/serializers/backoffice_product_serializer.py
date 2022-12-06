@@ -5,8 +5,54 @@ from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 from .media_serializer import MediaSerializer
-from ..models import Product
+from ..models import Product, Coupons, Promotion
 from ..serializers import PromotionSerializer
+
+
+class CouponsBackofficeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coupons
+        fields = [
+            "id",
+            "name",
+            "code",
+            "discount",
+            "is_active",
+        ]
+
+    def create(self, validated_data):
+        return Promotion.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+
+class PromotionBackofficeSerializer(serializers.ModelSerializer):
+    coupons = CouponsBackofficeSerializer()
+
+    class Meta:
+        model = Promotion
+        fields = [
+            "id",
+            "name",
+            "period",
+            "coupons",
+            "is_active",
+            "is_schedule",
+            "date_start",
+            "date_end",
+        ]
+
+    def create(self, validated_data):
+        return Promotion.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.prefetch_related("coupons")
+        return queryset
 
 
 class BackofficeProductSerializer(serializers.ModelSerializer):
@@ -49,8 +95,10 @@ class BackofficeProductSerializer(serializers.ModelSerializer):
                 return None
         else:
             return prod.promo_price
+
     @staticmethod
     def setup_eager_loading(queryset):
+        queryset = queryset.prefetch_related("images", "inventory")
         return queryset
 
     def create(self, validated_data):
@@ -61,6 +109,6 @@ class BackofficeProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-       Update and return an existing `Snippet` instance, given the validated data.
-       """
+        Update and return an existing `Snippet` instance, given the validated data.
+        """
         return super().update(instance, validated_data)
