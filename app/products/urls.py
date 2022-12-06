@@ -14,7 +14,7 @@ from .views import (
     SearchProductView,
     BackofficeProductViewset,
     BackofficeCouponsViewset,
-    BackofficePromotionViewset
+    BackofficePromotionViewset,
 )
 
 router = DefaultRouter()
@@ -29,7 +29,9 @@ router.register(
     "backoffice/coupons", BackofficeCouponsViewset, basename="backoffice-coupons"
 )
 router.register(
-    "backoffice/promotions", BackofficePromotionViewset, basename="backoffice-promotions"
+    "backoffice/promotions",
+    BackofficePromotionViewset,
+    basename="backoffice-promotions",
 )
 app_name = "product"
 
