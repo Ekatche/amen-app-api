@@ -5,3 +5,4 @@ from .products_serializers import (
     ProductSearchSerializer,
 )  # noqa:
 from .media_serializer import MediaSerializer
+from .backoffice_product_serializer import BackofficeProductSerializer

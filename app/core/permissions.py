@@ -16,19 +16,19 @@ class NoDevBackofficePermission(BackofficePermission):
 
 class NoAdminBackofficePermission(BackofficePermission):
     def has_permission(self, request, view):
-        return not request.user.bimedoc_role == ROLE_ADMIN
+        return not request.user.amen_role == ROLE_ADMIN
 
 
 class NoSalesBackofficePermission(BackofficePermission):
     def has_permission(self, request, view):
-        return not request.user.bimedoc_role == ROLE_SALES
+        return not request.user.amen_role == ROLE_SALES
 
 
 class ReadOnlyDevBackofficePermission(BackofficePermission):
     def has_permission(self, request, view):
         return not (
             request.method not in permissions.SAFE_METHODS
-            and request.user.bimedoc_role == ROLE_DEV
+            and request.user.amen_role == ROLE_DEV
         )
 
 
@@ -36,7 +36,7 @@ class ReadOnlyAdminBackofficePermission(BackofficePermission):
     def has_permission(self, request, view):
         return not (
             request.method not in permissions.SAFE_METHODS
-            and request.user.bimedoc_role == ROLE_ADMIN
+            and request.user.amen_role == ROLE_ADMIN
         )
 
 
@@ -44,7 +44,7 @@ class ReadOnlySalesBackofficePermission(BackofficePermission):
     def has_permission(self, request, view):
         return not (
             request.method not in permissions.SAFE_METHODS
-            and request.user.bimedoc_role == ROLE_SALES
+            and request.user.amen_role == ROLE_SALES
         )
 
 

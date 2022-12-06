@@ -24,6 +24,7 @@ services:
 
 
   elasticsearch:
+    #  elastic search is used for research optimisation
     container_name: search
     image: elasticsearch:7.17.7
     env_file:
@@ -36,6 +37,7 @@ services:
       - ELASTICSEARCH_PORT=9200
 
   db:
+    #    the database where is stored the app data
     image: postgres:13-alpine
     container_name: local_db
     volumes:
@@ -46,6 +48,7 @@ services:
       - "5432:5432"
 
   pgadmin:
+    #    interface to access the pg database
     container_name: pgadmin4_container
     image: dpage/pgadmin4
     restart: always
@@ -59,13 +62,15 @@ services:
       - "db:pgsql-server"
 
   redis:
+    #    redis is our messages broker, we sent tasks to redis and it disctibutes it to the celery workers
     container_name: redis
     restart: always
     image: redis:alpine
     ports:
-        - "6379:6379"
+      - "6379:6379"
 
   celery:
+    #    celery is used to automate tasks that updated the database
     container_name: celery_ecommerce_amen
     restart: always
     build:
@@ -81,6 +86,7 @@ services:
       - app
 
   celery-beat:
+    #    celery beat is used to schedule celery tasks
     container_name: celery_beat_ecommerce_amen
     restart: always
     build:
@@ -93,6 +99,7 @@ services:
       - ./app:/app
 
   flower:
+    #    flower is used to manage celery tasks, see if they fail or succeed and see the errors messages
     container_name: flower_ecommerce
     image: mher/flower
     environment:
