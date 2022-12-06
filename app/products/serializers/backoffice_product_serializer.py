@@ -109,6 +109,6 @@ class BackofficeProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Update and return an existing `Snippet` instance, given the validated data.
+        Update and return an existing `OrderItem` instance, given the validated data.
         """
         return super().update(instance, validated_data)

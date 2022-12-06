@@ -1,13 +1,13 @@
-from rest_framework import viewsets, serializers, status
+from rest_framework import viewsets, serializers, status, mixins
 from products.models import Product
-from .serializers import (
+from ..serializers import (
     ShoppingCartSerializer,
     OrderSerializer,
     CartItemSerializer,
     OrderItemSerializer,
 )
 from rest_framework.decorators import action
-from .models import ShoppingCart, Order, CartItem, OrderItem
+from order.models import ShoppingCart, Order, CartItem, OrderItem
 from core.models import User
 from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
@@ -19,7 +19,13 @@ from django.db.models import F
 from django.db.models import Sum
 
 
-class ShoppingcartViewset(viewsets.ModelViewSet):
+class ShoppingcartViewset(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     API endpoint that allows carts to be viewed or edited.
     """
@@ -130,10 +136,13 @@ class ShoppingcartViewset(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class CartItemViewSet(viewsets.ModelViewSet):
+class CartItemViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
     """
-    APi that allow cart items to be viewed or edited
-    allow only admin user to modify shopping cart
+    APi that allow cart items to be viewed
     """
 
     queryset = CartItem.objects.all()
@@ -149,9 +158,15 @@ class CartItemViewSet(viewsets.ModelViewSet):
         return self.queryset.filter(customer=user)
 
 
-class OrderViewset(viewsets.ModelViewSet):
+class OrderViewset(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
     """
-    API endpoint to allow order to be viewed and created
+    API endpoint to allow order to be viewed, created and updated
     """
 
     # to place an order the user must be connected
@@ -268,9 +283,13 @@ class OrderViewset(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class OrderItemViewSet(viewsets.ModelViewSet):
+class OrderItemViewSet(
+    viewsets.GenericViewSet,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+):
     """
-    API endpoint that allows order items to be viewed or edited.
+    API endpoint that allows order items to be viewed
     """
 
     authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
