@@ -178,11 +178,11 @@ INTERNAL_IPS = [
 
 if ENVIRONMENT.lower() in ["local"]:
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": "elasticsearch"},
+        "default": {"hosts": "search"},
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"host": "localhost:9200"},
+        "default": {"host": "search:9200"},
     }
 
 CELERY_BROKER_URL = "redis://redis:6379"

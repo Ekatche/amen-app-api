@@ -2,23 +2,7 @@
 Views for the producs API
 """
 
-from rest_framework import viewsets, mixins, status
-from rest_framework.response import Response
-from ..models import Product
-from ..serializers import ProductSerializer, ProductSearchSerializer
 from core.permissions import ReadOnlyPermission
-from documents import ProductDocument
-from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
-from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
-
-from django_elasticsearch_dsl_drf.filter_backends import (
-    FilteringFilterBackend,
-    IdsFilterBackend,
-    OrderingFilterBackend,
-    DefaultOrderingFilterBackend,
-    SearchFilterBackend,
-)
-
 from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_FILTER_TERMS,
     LOOKUP_FILTER_RANGE,
@@ -31,6 +15,21 @@ from django_elasticsearch_dsl_drf.constants import (
     LOOKUP_QUERY_LTE,
     LOOKUP_QUERY_EXCLUDE,
 )
+from django_elasticsearch_dsl_drf.filter_backends import (
+    FilteringFilterBackend,
+    IdsFilterBackend,
+    OrderingFilterBackend,
+    DefaultOrderingFilterBackend,
+    SearchFilterBackend,
+)
+from django_elasticsearch_dsl_drf.pagination import PageNumberPagination
+from django_elasticsearch_dsl_drf.viewsets import BaseDocumentViewSet
+from documents import ProductDocument
+from rest_framework import viewsets, mixins, status
+from rest_framework.response import Response
+
+from ..models import Product
+from ..serializers import ProductSerializer, ProductSearchSerializer
 
 
 class ProductViewSet(

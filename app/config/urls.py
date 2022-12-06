@@ -37,8 +37,8 @@ urlpatterns = [
         name="redoc",
     ),
     path("api/user/", include("user.urls")),
-    path("api/product/", include("products.urls")),
-    path("api/category/", include("categories.urls")),
-    path("api/order/", include("order.urls")),
-    path("api/inventory/", include("inventory.urls")),
+    path("api/", include("products.urls")),
+    path("api/", include("categories.urls")),
+    path("api/", include("order.urls")),
+    path("api/", include("inventory.urls")),
 ]

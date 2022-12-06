@@ -1,8 +1,9 @@
 from django.contrib import admin
-from .models.product import Product
-from .models.media import Media
-from .models.promotion import Promotion, Coupons
 from inventory.admin import InventoryInLine
+
+from .models.media import Media
+from .models.product import Product
+from .models.promotion import Promotion, Coupons
 from .tasks import promotion_price, promotion_management
 
 
@@ -76,6 +77,7 @@ class PromotionAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
     def save_model(self, request, obj, form, change):
+        # override save for promotion and added celery tasks
         super().save_model(request, obj, form, change)
         promotion_management.delay()
 

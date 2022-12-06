@@ -2,15 +2,18 @@
 Views for promotion app
 """
 
-from rest_framework import viewsets
 from core.permissions import ReadOnlyPermission
+from rest_framework import viewsets, mixins
+
 from ..models import Promotion, Coupons
 from ..serializers import PromotionSerializer, CouponsSerializer
 
 
-class CouponsViewset(viewsets.ModelViewSet):
+class CouponsView(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     """
-    API end point to manage coupons
+    API end point to allow coupons to be viewed or listed
     """
 
     serializer_class = CouponsSerializer
@@ -18,9 +21,11 @@ class CouponsViewset(viewsets.ModelViewSet):
     queryset = Coupons.objects.all()
 
 
-class ProductPromotionView(viewsets.ModelViewSet):
+class ProductPromotionView(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
     """
-    View for manage promotion APIs
+    API end point to allow coupons to be viewed or listed
     """
 
     serializer_class = PromotionSerializer

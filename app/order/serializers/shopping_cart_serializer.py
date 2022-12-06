@@ -26,7 +26,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "cart",
-            "product",
+            "products",
             "quantity",
             "total_amount",
             "date_created",
