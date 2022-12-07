@@ -182,9 +182,10 @@ if ENVIRONMENT.lower() in ["local"]:
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"host": "search:9200"},
+        'default': {
+            'hosts': 'localhost:9200'
+        },
     }
-    ELASTICSEARCH_CLUSTER_URL = "http://159.223.167.255:9200"
 
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
