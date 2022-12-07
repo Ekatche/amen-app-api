@@ -21,6 +21,8 @@ services:
       - db
       - elasticsearch
       - pgadmin
+    links:
+      - elasticsearch:elasticsearch
 
 
   elasticsearch:
@@ -35,6 +37,7 @@ services:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       - ELASTICSEARCH_PORT=9200
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     expose:
       - "9200"
 
