@@ -1,7 +1,7 @@
 ---
 name: Checks
 
-on: [push]
+on: [ push ]
 
 jobs:
   test-lint:
@@ -19,15 +19,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Wait for db
-        run: docker-compose run app sh -c "python manage.py wait_for_db"
-#      - name: check elestic search
-#        run: curl -X GET localhost:9200/_cluster/health
+        run: docker-compose run app   --rm   sh -c "python manage.py wait_for_db"
+      #      - name: check elestic search
+      #        run: curl -X GET localhost:9200/_cluster/health
       - name: view ports
         run: docker-compose ps -a
-      - name : test
-        run : docker-compose run app sh -c "python manage.py test"
+      - name: test
+        run: docker-compose run app   --rm  sh -c "python manage.py test"
       - name: Checking
-        run: docker-compose run app sh -c "flake8"
-      - name: terminate docker
-        run: docker-compose down
+        run: docker-compose run app   --rm  sh -c "flake8"
+
 

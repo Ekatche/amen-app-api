@@ -33,8 +33,6 @@ services:
       - ./.env.dev.txt
     ports:
       - "9200:9200"
-    networks:
-      - deploy_network
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
@@ -115,8 +113,4 @@ services:
 volumes:
   dev-db-data:
   pgadmin-data:
-
-networks:
-  deploy_network:
-    driver: bridge
 
