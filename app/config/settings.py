@@ -183,7 +183,7 @@ if ENVIRONMENT.lower() in ["local"]:
 else:
     ELASTICSEARCH_DSL = {
         'default': {
-            'hosts': 'localhost:9200'
+            'hosts': 'search'
         },
     }
 
