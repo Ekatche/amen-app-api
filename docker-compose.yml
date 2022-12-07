@@ -30,11 +30,17 @@ services:
     env_file:
       - ./.env.dev.txt
     ports:
-      - "9200:9200"
+      #- "9200:9200"
+      - target: 9200
+        host_ip: 127.0.0.1
+        published: 9200
+        mode: host
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       - ELASTICSEARCH_PORT=9200
+    expose:
+      - "9200"
 
   db:
     #    the database where is stored the app data
