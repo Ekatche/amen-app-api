@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import os
 from pathlib import Path
-
+import os
 from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -182,10 +181,10 @@ if ENVIRONMENT.lower() in ["local"]:
         "default": {"hosts": "search"},
     }
 else:
-    ELASTICSEARCH_CLUSTER_URL = "localhost:9200"
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": "search"},
+        "default": {"host": "search:9200"},
     }
+    ELASTICSEARCH_CLUSTER_URL = "http://159.223.167.255:9200"
 
 CELERY_BROKER_URL = "redis://redis:6379"
 CELERY_RESULT_BACKEND = "redis://redis:6379"
