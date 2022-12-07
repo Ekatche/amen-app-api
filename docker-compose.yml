@@ -36,10 +36,7 @@ services:
     volumes:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
-      - ELASTICSEARCH_PORT=9200
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    expose:
-      - "9200"
 
   db:
     #    the database where is stored the app data
