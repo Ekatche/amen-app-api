@@ -18,6 +18,7 @@ services:
       - ./.env.dev.txt
     environment:
       - ES_HOST=elasticsearch
+      - DB_HOST=db
     depends_on:
       - redis
       - db
