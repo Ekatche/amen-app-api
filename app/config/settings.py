@@ -184,7 +184,7 @@ if ENVIRONMENT.lower() in ["local"]:
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": "elasticsearch:9200"},
+        "default": {"hosts": "10.1.0.1:9200"},
     }
 
 CELERY_BROKER_URL = "redis://redis:6379"
