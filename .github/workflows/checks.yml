@@ -27,7 +27,7 @@ jobs:
       - name: ip address
         run: ip a
       - name: display default getway
-        run: ip r
+        run: ip route | grep default
       - name: test
         run: docker-compose run --rm app sh -c "python manage.py test"
       - name: Checking
