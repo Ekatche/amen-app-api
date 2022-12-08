@@ -24,6 +24,8 @@ jobs:
       #        run: curl -X GET localhost:9200/_cluster/health
       - name: view ports
         run: docker-compose ps -a
+      - name: ip address
+        run: ip a
       - name: test
         run: docker-compose run --rm app sh -c "python manage.py test"
       - name: Checking
