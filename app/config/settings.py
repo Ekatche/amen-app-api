@@ -179,12 +179,13 @@ INTERNAL_IPS = [
 ]
 
 if ENVIRONMENT.lower() in ["local"]:
+
     ELASTICSEARCH_DSL = {
         "default": {"hosts": os.environ.get("ES_HOST")},
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": "0.0.0.0:9200"},
+        "default": {"hosts": os.environ.get("ES_HOST")},
         "dev": {
             'hosts': ['127.0.0.1:9200', os.environ.get("ES_HOST")],
             'sniff_on_start': True
