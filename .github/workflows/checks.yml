@@ -7,6 +7,7 @@ jobs:
   test-lint:
     name: Test and Lint
     runs-on:  [self-hosted, Linux]
+
     # configure elastic search on GitHub actions
 #    services:
 #      elasticsearch:
@@ -31,8 +32,6 @@ jobs:
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db"
       - name: view ports
         run: docker-compose ps -a
-      - name: view accessible ports
-        run: netstat -lt
       - name: display default getway
         run: ip route | grep default
       - name: test
