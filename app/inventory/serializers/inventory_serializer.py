@@ -16,3 +16,15 @@ class InventorySerializer(serializers.ModelSerializer):
             "total",
             "available_quantity",
         ]
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Order Item` instance, given the validated data.
+        """
+        return Inventory.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Order Item` instance, given the validated data.
+        """
+        return super().update(instance, validated_data)

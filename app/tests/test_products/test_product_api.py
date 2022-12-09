@@ -84,7 +84,7 @@ class PrivateProductApiTest(TestCase):
     def test_retrieve_product_by_sub_category(self):
         subcategory = SubCategoryFactory()
         product = ProductFactory(subcategory=subcategory)
-        link = f"/api/product/product/?subcategory_name={product.subcategory.name}"
+        link = f"/api/product/?subcategory_name={product.subcategory.name}"
         res = self.client.get(link)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -93,7 +93,7 @@ class PrivateProductApiTest(TestCase):
     def test_retrieve_product_by_category(self):
         category = CategoryFactory(name="test_VTF")
         product = ProductFactory(categories=(category,))
-        link = f"/api/product/product/?category_name={category.name}"
+        link = f"/api/product/?category_name={category.name}"
         res = self.client.get(link)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)

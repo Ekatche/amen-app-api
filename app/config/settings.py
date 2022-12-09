@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
 from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
+    # Django Elasticsearch integration
     "django_elasticsearch_dsl",
     "django_elasticsearch_dsl_drf",
     # Internal config
@@ -177,12 +179,13 @@ INTERNAL_IPS = [
 ]
 
 if ENVIRONMENT.lower() in ["local"]:
+
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": "search"},
+        "default": {"hosts": os.environ.get("ES_HOST")},
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"host": "search:9200"},
+                "default": {"hosts": 'search:9200'},
     }
 
 CELERY_BROKER_URL = "redis://redis:6379"
