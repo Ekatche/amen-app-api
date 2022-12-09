@@ -10,7 +10,7 @@ jobs:
     # configure elastic search on GitHub actions
 #    services:
 #      elasticsearch:
-#        image: bitnami/elasticsearch:7.17.7
+#        image: search
 #        ports:
 #          - 9200:9200
 
