@@ -40,6 +40,12 @@ services:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       ES_JAVA_OPTS: '-Xms256m -Xmx256m'
+      cluster.routing.allocation.disk.threshold_enabled: false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks: [ 'stack' ]
 
   db:
     #    the database where is stored the app data
