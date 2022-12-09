@@ -25,7 +25,7 @@ services:
       - elasticsearch
       - pgadmin
     networks:
-      - my-network
+      - es_network
 
 
   elasticsearch:
@@ -46,7 +46,7 @@ services:
         soft: -1
         hard: -1
     networks:
-      - my-network
+      - es_network
 
   db:
     #    the database where is stored the app data
