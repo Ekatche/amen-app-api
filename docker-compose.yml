@@ -40,7 +40,6 @@ services:
       - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       ES_JAVA_OPTS: '-Xms256m -Xmx256m'
-    network_mode: host
 
   db:
     #    the database where is stored the app data
