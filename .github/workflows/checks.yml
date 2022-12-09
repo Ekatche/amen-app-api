@@ -7,12 +7,12 @@ jobs:
   test-lint:
     name: Test and Lint
     runs-on: ubuntu-latest
-    # configure elastic search on github actions
-    services:
-      elasticsearch:
-        image: bitnami/elasticsearch:7.17.7
-        ports:
-          - 9200:9200
+    # configure elastic search on GitHub actions
+#    services:
+#      elasticsearch:
+#        image: bitnami/elasticsearch:7.17.7
+#        ports:
+#          - 9200:9200
 
     steps:
       - name: Login to Docker Hub

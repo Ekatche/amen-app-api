@@ -184,7 +184,7 @@ if ENVIRONMENT.lower() in ["local"]:
     }
 else:
     ELASTICSEARCH_DSL = {
-        "default": {"hosts": os.environ.get("ES_HOST")},
+        "default": {"hosts": "0.0.0.0:9200"},
     }
 
 CELERY_BROKER_URL = "redis://redis:6379"
