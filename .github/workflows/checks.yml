@@ -33,8 +33,6 @@ jobs:
         run: docker-compose ps -a
       - name: display default getway
         run: ip route | grep default
-      - name: checks elasticsearch running
-        run: curl -X GET http://0.0.0.0:9200/_status
       - name: test
         run: docker-compose run --rm app sh -c "python manage.py test"
       - name: Checking
