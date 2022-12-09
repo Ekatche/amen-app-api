@@ -24,8 +24,8 @@ services:
       - db
       - elasticsearch
       - pgadmin
-    links:
-      - elasticsearch:elasticsearch
+    networks:
+      - my-network
 
 
   elasticsearch:
@@ -45,7 +45,8 @@ services:
       memlock:
         soft: -1
         hard: -1
-    networks: [ 'stack' ]
+    networks:
+      - my-network
 
   db:
     #    the database where is stored the app data
@@ -122,4 +123,7 @@ services:
 volumes:
   dev-db-data:
   pgadmin-data:
+
+networks:
+  es_network:
 
