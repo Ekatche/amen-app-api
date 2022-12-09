@@ -25,6 +25,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Start containers
+        run: docker-compose -f "docker-compose.yml" up -d --build
       - name: Wait for db
         run: docker-compose run --rm app sh -c "python manage.py wait_for_db"
       - name: view ports
@@ -37,5 +39,8 @@ jobs:
         run: docker-compose run --rm app sh -c "python manage.py test"
       - name: Checking
         run: docker-compose run --rm app sh -c "flake8"
+      - name: Stop containers
+        if: always()
+        run: docker-compose -f "docker-compose.yml" down
 
 
