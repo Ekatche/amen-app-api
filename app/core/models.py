@@ -183,3 +183,18 @@ class BillingAddress(models.Model):
                 return self.street + " " + self.city
             else:
                 return ""
+
+
+class JwtToken(models.Model):
+    user = models.ForeignKey("User", on_delete=models.CASCADE)
+
+    token_access = models.TextField()
+    token_refresh = models.TextField()
+
+    ip_address = models.CharField(max_length=50, blank=True)
+    user_agent = models.CharField(max_length=500, blank=True)
+
+    is_logged_out = models.BooleanField(default=False)
+
+    date_modified = models.DateTimeField(auto_now=True)
+    date_created = models.DateTimeField(auto_now_add=True)
