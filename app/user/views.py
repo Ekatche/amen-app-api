@@ -49,7 +49,8 @@ from .serializers import (
 #
 #
 ##############################################################
-class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class CreateUserViewSet(mixins.CreateModelMixin,
+                        viewsets.GenericViewSet):
     """Create a new user in the system."""
 
     serializer_class = UserSerializer
@@ -84,7 +85,9 @@ class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 
 class Userviewset(
-    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
 ):
     """
     Update user
@@ -235,7 +238,16 @@ class ShippingAddressViewset(viewsets.ModelViewSet):
 
 class SignUpView(APIView):
     """
-    Sign up to the app
+    Sign up to the app \n
+    :param
+    email : email
+    first_name : first name
+    last_name : user last name
+    phone_prefix : user phone prefix
+    phone_number : user phone number
+    birth_date : date of birth
+    password : 1st password
+    password2 : password confirmation
     """
 
     permission_classes = (AllowAny,)
@@ -302,12 +314,15 @@ class AuthLogoutview(APIView):
 
     def post(self, request, format=None):
         token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
-        jwt_token = JwtToken.objects.get(
-            user=self.request.user,
-            is_logged_out=False,
-            token_access=token["access"],
-            token_refresh=token["refresh"],
-        )
+        user = self.request.user
+        try :
+            jwt_token = JwtToken.objects.get(
+                user_id=user.id,
+                token_access=token,
+            )
+        except Exception :
+            return Response({"msg": "Token does not exist"}, status=HTTP_400_BAD_REQUEST)
+
         jwt_token.is_logged_out = True
         jwt_token.save()
 
@@ -324,8 +339,9 @@ class AuthLogoutview(APIView):
 
 
 class BackofficeUserViewset(viewsets.ModelViewSet):
-    authentication_classes = JWTAuthenticationSafe
-    permission_classes = (BackofficePermission, ReadOnlyDevBackofficePermission)
+    authentication_classes = (JWTAuthenticationSafe,)
+    permission_classes = (BackofficePermission,
+                          ReadOnlyDevBackofficePermission)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -344,8 +360,8 @@ class BackofficeUserViewset(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        password = serializer.data["password"]
         user = serializer.save()
+        password = user.password
         user.set_password(password)
         user.save()
         return password
@@ -358,3 +374,50 @@ class BackofficeUserViewset(viewsets.ModelViewSet):
         data = serializer.data
         data.update({"password": password})
         return Response(data, status=HTTP_201_CREATED, headers=headers)
+
+
+class BackofficeLoginView(APIView):
+    authentication_classes = ()
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+
+        # will be replace by real username
+        username = request.data.get("email", "").lower().replace(" ", "")
+        password = request.data.get("password", "")
+
+        user = authenticate(email=username, password=password)
+        if not user:
+            raise PermissionDenied({"errors": ["username / pwd bad combination"]})
+        if not user.amen_role:
+            raise PermissionDenied({"errors": ["can not access to BO"]})
+
+        token = generate_auth_token(user, request)
+
+        data = {
+            "user": str(user.id),
+            "token": token,
+            "username": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "bimedoc_role": user.amen_role,
+        }
+
+        return Response(data)
+
+
+class BackofficeLogoutView(APIView):
+    authentication_classes = (JWTAuthenticationSafe,)
+    permission_classes = ()
+
+    def post(self, request, format=None):
+        token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+        jwt_token = JwtToken.objects.get(
+            user=self.request.user, is_logged_out=False,
+            token_access=token["access"],
+            token_refresh=token["refresh"],
+        )
+        jwt_token.is_logged_out = True
+        jwt_token.save()
+
+        return Response({"msg": "Successfully Logged out"}, status=HTTP_200_OK)

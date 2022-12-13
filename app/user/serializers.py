@@ -155,6 +155,9 @@ class InputSignupSerializer(serializers.Serializer):
     phone_number = serializers.CharField(allow_null=False, max_length=30, required=True)
     birth_date = serializers.DateTimeField(allow_null=False, required=True)
     password2 = serializers.CharField(style={"input_type": "password"}, write_only=True)
+    extra_kwargs = {"password": {"write_only": True, "min_length": 5},
+                    "password2": {"write_only": True, "min_length": 5}
+                    }
 
     def validate(self, attrs):
         attrs["phone_prefix"] = attrs["phone_prefix"].replace(" ", "").replace(".", "")
@@ -169,9 +172,12 @@ class InputSignupSerializer(serializers.Serializer):
 
         if attrs["password2"] != attrs["password"]:
             raise serializers.ValidationError({"password": "Password must match"})
+        elif len(attrs["password"]) < 5:
+            raise serializers.ValidationError({"password": "Password must be minimum 5 caracters"})
 
         attrs["gender"] = attrs["gender"].lower()
         return attrs
+
 
 
 # # #####################################################

@@ -75,6 +75,8 @@ services:
       - pgadmin-data:/var/lib/pgadmin
     links:
       - "db:pgsql-server"
+    networks:
+        - es_network
 
   redis:
     #    redis is our messages broker, we sent tasks to redis and it disctibutes it to the celery workers
