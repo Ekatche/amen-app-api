@@ -5,6 +5,7 @@ Django admin customisations
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
+
 from . import models
 
 
@@ -45,6 +46,23 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
+
+
+class JwtTokenAdmin(admin.ModelAdmin):
+    ordering = ["id"]
+    list_display = [
+        "user",
+        "token_access",
+        "token_refresh",
+        "ip_address",
+        "user_agent",
+        "is_logged_out",
+        "date_modified",
+        "date_created",
+    ]
+
+
+admin.site.register(models.JwtToken, JwtTokenAdmin)
 
 
 class ShippingAddressAdmin(admin.ModelAdmin):

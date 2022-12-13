@@ -21,7 +21,7 @@ class PublicInventoryAPITests(TestCase):
 
     def test_permission_needed_(self):
         res = self.client.get(INVENTORY_URLS)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class PivrateInventoryAPITests(TestCase):
