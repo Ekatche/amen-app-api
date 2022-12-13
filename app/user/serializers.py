@@ -20,12 +20,13 @@ class UserSerializer(serializers.ModelSerializer):
             "phone_prefix",
             "phone_number",
             "gender",
-            "password" "first_name",
+            "password",
+            "first_name",
             "last_name",
             "birth_date",
         ]
         extra_kwargs = {"password": {"write_only": True, "min_length": 5}}
-        read_only_fields = ("date_created", "date_modified", "organizations")
+        read_only_fields = ("date_created", "date_modified")
 
     def validate_phone_prefix(self, value):
         if not value.startswith("+"):
@@ -61,7 +62,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "last_name",
             "birth_date",
         )
-        read_only_fields = ("date_created", "date_modified", "organizations")
+        read_only_fields = ("date_created", "date_modified")
 
         def update(self, instance, validated_data):
             user = super().update(instance, validated_data)
@@ -171,3 +172,75 @@ class InputSignupSerializer(serializers.Serializer):
 
         attrs["gender"] = attrs["gender"].lower()
         return attrs
+
+
+# # #####################################################
+#
+# BackOffice serializers
+#
+# # ######################################################
+
+
+class ListBackofficeUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "phone_prefix",
+            "phone_number",
+            "gender",
+            "first_name",
+            "last_name",
+            "birth_date",
+        )
+        read_only_fields = fields
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        return queryset
+
+
+class BackOfficeUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "email",
+            "phone_prefix",
+            "phone_number",
+            "gender",
+            "first_name",
+            "last_name",
+            "birth_date",
+        )
+        read_only_fields = ("date_created", "date_modified")
+
+        @staticmethod
+        def setup_eager_loading(queryset):
+            return queryset
+
+        def validate_email(self, email):
+            return email.lower().strip()
+
+        def validate_phone_prefix(self, value):
+            if not value.startswith("+"):
+                raise ValidationError({"errors": ["phone_prefix must start with +"]})
+
+            if value:
+                return value.replace(" ", "").replace(".", "")
+
+            return value
+
+        def validate_phone_number(self, value):
+            if value:
+                return value.replace(" ", "").replace(".", "")
+
+            return value
+
+        def create(self, validated_data):
+            instance = super().create(validated_data)
+            return instance
+
+        def update(self, instance, validated_data):
+            return super().update(instance, validated_data)

@@ -3,11 +3,19 @@ Views for the user API
 """
 from typing import Optional
 
-from core.models import BillingAddress, ShippingAddress, User, JwtToken
+from core.models import (
+    BillingAddress,
+    ShippingAddress,
+    User,
+    JwtToken,
+    ROLE_ADMIN,
+)
+from core.permissions import BackofficePermission, ReadOnlyDevBackofficePermission
 from django.contrib.auth import authenticate
 from django.db import transaction
 from django.http import Http404
 from rest_framework import permissions, viewsets, mixins
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.status import (
@@ -26,10 +34,21 @@ from .serializers import (
     ShippingAddressSerializer,
     InputSignupSerializer,
     UserUpdateSerializer,
+    ListBackofficeUserSerializer,
+    BackOfficeUserSerializer,
 )
 
 
 # from rest_framework.exceptions import ValidationError
+
+
+##############################################################
+#
+#
+# APP Users
+#
+#
+##############################################################
 class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """Create a new user in the system."""
 
@@ -88,9 +107,7 @@ class Userviewset(
         with transaction.atomic():
             serializer, user = self._basic_operations(kwargs)
 
-        token = generate_auth_token(
-            self.request.user, self.request
-        )
+        token = generate_auth_token(self.request.user, self.request)
         # user signature no more correct after changing email,
         # re-fetch a token with new user data
         newdict = {"token": token}
@@ -295,3 +312,49 @@ class AuthLogoutview(APIView):
         jwt_token.save()
 
         return Response({"msg": "Successfully Logged out"}, status=HTTP_200_OK)
+
+
+##############################################################
+#
+#
+# Backoffice Users
+#
+#
+##############################################################
+
+
+class BackofficeUserViewset(viewsets.ModelViewSet):
+    authentication_classes = JWTAuthenticationSafe
+    permission_classes = (BackofficePermission, ReadOnlyDevBackofficePermission)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ListBackofficeUserSerializer
+        else:
+            return BackOfficeUserSerializer
+
+    def get_queryset(self):
+        queryset = User.objects.all()
+        queryset = self.get_serializer_class().setup_eager_loading(queryset)
+        return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.bimedoc_role != ROLE_ADMIN:
+            raise PermissionDenied()
+        return super().destroy(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        password = serializer.data["password"]
+        user = serializer.save()
+        user.set_password(password)
+        user.save()
+        return password
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        password = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        data = serializer.data
+        data.update({"password": password})
+        return Response(data, status=HTTP_201_CREATED, headers=headers)

@@ -12,6 +12,9 @@ router.register("billingaddress", views.BillingAddressViewset, basename="user")
 router.register("shippingaddress", views.ShippingAddressViewset, basename="user")
 router.register("user", views.Userviewset, basename="user")
 router.register("user", views.CreateUserViewSet)
+router.register(
+    "backoffice/user", views.BackofficeUserViewset, basename="backoffice-user"
+)
 
 app_name = "user"
 urlpatterns = [
