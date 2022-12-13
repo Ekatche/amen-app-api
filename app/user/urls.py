@@ -8,8 +8,12 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
-router.register("billingaddress", views.BillingAddressViewset, basename="user-billingaddress")
-router.register("shippingaddress", views.ShippingAddressViewset, basename="user-shippingaddress")
+router.register(
+    "billingaddress", views.BillingAddressViewset, basename="user-billingaddress"
+)
+router.register(
+    "shippingaddress", views.ShippingAddressViewset, basename="user-shippingaddress"
+)
 router.register("user", views.Userviewset, basename="update")
 router.register("create", views.CreateUserViewSet, basename="create")
 router.register(

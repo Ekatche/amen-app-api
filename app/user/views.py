@@ -49,8 +49,7 @@ from .serializers import (
 #
 #
 ##############################################################
-class CreateUserViewSet(mixins.CreateModelMixin,
-                        viewsets.GenericViewSet):
+class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     """Create a new user in the system."""
 
     serializer_class = UserSerializer
@@ -85,9 +84,7 @@ class CreateUserViewSet(mixins.CreateModelMixin,
 
 
 class Userviewset(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    viewsets.GenericViewSet
+    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
     """
     Update user
@@ -315,13 +312,15 @@ class AuthLogoutview(APIView):
     def post(self, request, format=None):
         token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
         user = self.request.user
-        try :
+        try:
             jwt_token = JwtToken.objects.get(
                 user_id=user.id,
                 token_access=token,
             )
-        except Exception :
-            return Response({"msg": "Token does not exist"}, status=HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response(
+                {"msg": "Token does not exist"}, status=HTTP_400_BAD_REQUEST
+            )
 
         jwt_token.is_logged_out = True
         jwt_token.save()
@@ -340,8 +339,7 @@ class AuthLogoutview(APIView):
 
 class BackofficeUserViewset(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthenticationSafe,)
-    permission_classes = (BackofficePermission,
-                          ReadOnlyDevBackofficePermission)
+    permission_classes = (BackofficePermission, ReadOnlyDevBackofficePermission)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -413,7 +411,8 @@ class BackofficeLogoutView(APIView):
     def post(self, request, format=None):
         token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
         jwt_token = JwtToken.objects.get(
-            user=self.request.user, is_logged_out=False,
+            user=self.request.user,
+            is_logged_out=False,
             token_access=token["access"],
             token_refresh=token["refresh"],
         )

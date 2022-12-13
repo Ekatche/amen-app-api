@@ -11,7 +11,7 @@ from rest_framework.test import APIClient
 login_url = reverse("user:login")
 logout_url = reverse("user:logout")
 signup_url = reverse("user:signup")
-me_url = '/api/user/user/'
+me_url = "/api/user/user/"
 changePassWord_url = "/api/user/userChangePassword/"
 
 
@@ -41,7 +41,7 @@ class PublicUserApiTests(TestCase):
             "password2": "Testpass123",
             "first_name": "test",
             "last_name": "case",
-            "birth_date": "2022-12-13T13:24:51.977Z"
+            "birth_date": "2022-12-13T13:24:51.977Z",
         }
         res = self.client.post(signup_url, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -61,7 +61,7 @@ class PublicUserApiTests(TestCase):
             "password2": "Testpass123",
             "first_name": "test",
             "last_name": "case",
-            "birth_date": "2022-12-13T13:24:51.977Z"
+            "birth_date": "2022-12-13T13:24:51.977Z",
         }
         create_user(**payload)
 
@@ -79,7 +79,7 @@ class PublicUserApiTests(TestCase):
             "password2": "tes",
             "first_name": "test",
             "last_name": "case",
-            "birth_date": "2022-12-13T13:24:51.977Z"
+            "birth_date": "2022-12-13T13:24:51.977Z",
         }
         res = self.client.post(signup_url, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -97,7 +97,7 @@ class PublicUserApiTests(TestCase):
             "password2": "test12",
             "first_name": "test",
             "last_name": "case",
-            "birth_date": "2022-12-13T13:24:51.977Z"
+            "birth_date": "2022-12-13T13:24:51.977Z",
         }
         res = self.client.post(signup_url, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
@@ -201,20 +201,19 @@ class PrivateUserAPITests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def _login(self):
-        data = {"email": "testy@example.com",
-                "password": "test-user-pass123"}
+        data = {"email": "testy@example.com", "password": "test-user-pass123"}
         self.client.force_authenticate(user=self.user2)
         r = self.client.post(login_url, data)
         body = r.json()
-        if 'access' in body["token"]:
+        if "access" in body["token"]:
             self.client.credentials(
-                HTTP_AUTHORIZATION='Bearer %s' % body['token']['access'])
+                HTTP_AUTHORIZATION="Bearer %s" % body["token"]["access"]
+            )
         return r.status_code, body
 
     def test_logout_sucessfully(self):
-        """ test if logout end point works"""
+        """test if logout end point works"""
         _, body = self._login()
         r = self.client.post(logout_url)
 
         self.assertEquals(r.status_code, status.HTTP_200_OK)
-
