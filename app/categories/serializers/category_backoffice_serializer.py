@@ -22,7 +22,7 @@ class CategoryBackofficeSerializer(serializers.ModelSerializer):
 
 
 class SubCategoryBackofficeSerializer(serializers.ModelSerializer):
-    category = CategoryBackofficeSerializer()
+    # category = CategoryBackofficeSerializer()
 
     class Meta:
         model = SubCategory

@@ -10,7 +10,7 @@ from core.models import (
     JwtToken,
     ROLE_ADMIN,
 )
-from core.permissions import BackofficePermission, ReadOnlyDevBackofficePermission
+from core.permissions import BackofficePermission
 from django.contrib.auth import authenticate
 from django.db import transaction
 from django.http import Http404
@@ -25,8 +25,8 @@ from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
 )
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .authenticate import JWTAuthenticationSafe
 from .functions import generate_auth_token, get_object_for_login
 from .serializers import (
     UserSerializer,
@@ -36,6 +36,7 @@ from .serializers import (
     UserUpdateSerializer,
     ListBackofficeUserSerializer,
     BackOfficeUserSerializer,
+    AuthLoginSerializer,
 )
 
 
@@ -90,7 +91,7 @@ class Userviewset(
     Update user
     """
 
-    authentication_classes = (JWTAuthenticationSafe,)
+    authentication_classes = (JWTAuthentication,)
     serializer_class = UserUpdateSerializer
     permissions_classes = permissions.IsAuthenticated
     queryset = User.objects.all()
@@ -139,7 +140,7 @@ class UserChangePassword(APIView):
     Send as PATCH parameters: "old_password" and "new_password"
     """
 
-    authentication_classes = (JWTAuthenticationSafe,)
+    authentication_classes = (JWTAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
     def patch(self, request, format=None):
@@ -203,7 +204,7 @@ class BillingAddressViewset(viewsets.ModelViewSet):
     """
 
     serializer_class = BillingAddressSerializer
-    authentication_classes = (JWTAuthenticationSafe,)
+    authentication_classes = (JWTAuthentication,)
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -221,7 +222,7 @@ class ShippingAddressViewset(viewsets.ModelViewSet):
     """
 
     serializer_class = ShippingAddressSerializer
-    authentication_classes = (JWTAuthenticationSafe,)
+    authentication_classes = (JWTAuthentication,)
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
@@ -248,6 +249,9 @@ class SignUpView(APIView):
     """
 
     permission_classes = (AllowAny,)
+
+    def get_serializer(self, *args, **kwargs):
+        return InputSignupSerializer(*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         serializer = InputSignupSerializer(data=request.data)
@@ -283,6 +287,9 @@ class AuthLoginView(APIView):
     authentication_classes = ()
     permission_classes = (AllowAny,)
 
+    def get_serializer(self, *args, **kwargs):
+        return AuthLoginSerializer(*args, **kwargs)
+
     def post(self, request, format=None):
         data = request.data
         email = data.get("email", "").lower().replace(" ", "")
@@ -306,22 +313,13 @@ class AuthLogoutview(APIView):
     View to logout from the app
     """
 
-    authentication_classes = (JWTAuthenticationSafe,)
-    permission_classes = (permissions.IsAuthenticated,)
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
-        token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+        token = request.data.get("refresh", "")
         user = self.request.user
-        try:
-            jwt_token = JwtToken.objects.get(
-                user_id=user.id,
-                token_access=token,
-            )
-        except Exception:
-            return Response(
-                {"msg": "Token does not exist"}, status=HTTP_400_BAD_REQUEST
-            )
-
+        jwt_token = JwtToken.objects.get(user_id=user, token_refresh=token)
         jwt_token.is_logged_out = True
         jwt_token.save()
 
@@ -338,8 +336,8 @@ class AuthLogoutview(APIView):
 
 
 class BackofficeUserViewset(viewsets.ModelViewSet):
-    authentication_classes = (JWTAuthenticationSafe,)
-    permission_classes = (BackofficePermission, ReadOnlyDevBackofficePermission)
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (BackofficePermission,)
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -381,12 +379,12 @@ class BackofficeLoginView(APIView):
     def post(self, request, format=None):
 
         # will be replace by real username
-        username = request.data.get("email", "").lower().replace(" ", "")
+        email = request.data.get("email", "").lower().replace(" ", "")
         password = request.data.get("password", "")
 
-        user = authenticate(email=username, password=password)
+        user = authenticate(email=email, password=password)
         if not user:
-            raise PermissionDenied({"errors": ["username / pwd bad combination"]})
+            raise PermissionDenied({"errors": ["email / pwd bad combination"]})
         if not user.amen_role:
             raise PermissionDenied({"errors": ["can not access to BO"]})
 
@@ -395,7 +393,7 @@ class BackofficeLoginView(APIView):
         data = {
             "user": str(user.id),
             "token": token,
-            "username": user.email,
+            "email": user.email,
             "first_name": user.first_name,
             "last_name": user.last_name,
             "bimedoc_role": user.amen_role,
@@ -405,17 +403,13 @@ class BackofficeLoginView(APIView):
 
 
 class BackofficeLogoutView(APIView):
-    authentication_classes = (JWTAuthenticationSafe,)
-    permission_classes = ()
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
-        token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
-        jwt_token = JwtToken.objects.get(
-            user=self.request.user,
-            is_logged_out=False,
-            token_access=token["access"],
-            token_refresh=token["refresh"],
-        )
+        token = request.data.get("refresh", "")
+        user = self.request.user
+        jwt_token = JwtToken.objects.get(user_id=user, token_refresh=token)
         jwt_token.is_logged_out = True
         jwt_token.save()
 

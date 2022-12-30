@@ -47,7 +47,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     subcategory = SubCategorySerializer(read_only=True)
     categories = CategorySerializer(read_only=True, many=True)
-    promotion = PromotionSerializer(source="promo", read_only=True)
+    promotion = PromotionSerializer(source="promo", read_only=True, allow_null=True)
     image = MediaSerializer(source="images", read_only=True, many=True)
     product_inventory = InventorySerializer(source="inventory", read_only=True)
     promo_price = serializers.SerializerMethodField()

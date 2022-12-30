@@ -3,6 +3,7 @@ from .models import Inventory
 from .serializers import InventorySerializer
 from core.permissions import BackofficePermission
 from rest_framework.exceptions import PermissionDenied
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class InventoryBackofficeViewSet(viewsets.ModelViewSet):
@@ -11,6 +12,7 @@ class InventoryBackofficeViewSet(viewsets.ModelViewSet):
     Only for Backoffice users
     """
 
+    authentication_classes = (JWTAuthentication,)
     queryset = Inventory.objects.all()
     serializer_class = InventorySerializer
     permission_classes = [BackofficePermission]
