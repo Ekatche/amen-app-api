@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import datetime
 import os
 from pathlib import Path
-import datetime
+
 from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -49,9 +50,10 @@ INSTALLED_APPS = [
     # Extrernal config
     "mptt",
     "rest_framework",
+    "rest_framework_simplejwt",
     "rest_framework.authtoken",
     "drf_spectacular",
-    "oauth2_provider",
+    "corsheaders",
     # Django Elasticsearch integration
     "django_elasticsearch_dsl",
     "django_elasticsearch_dsl_drf",
@@ -81,6 +83,7 @@ def _enable_conditional(application):
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -165,16 +168,15 @@ STATIC_URL = "/static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "core.User"
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "rest_framework.permissions.IsAuthenticated" "DEFAULT_PERMISSION_CLASSES": (),
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 100,
+    "PAGE_SIZE": 30,
 }
 
 OAUTH2_PROVIDER = {
@@ -191,7 +193,7 @@ OAUTH2_PROVIDER = {
 # JWT authentication
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=1),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=10),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
@@ -205,7 +207,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
+    "USER_ID_CLAIM": "user",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     "TOKEN_TYPE_CLAIM": "token_type",
@@ -215,6 +217,9 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME": datetime.timedelta(days=1),
     "SLIDING_TOKEN_REFRESH_LIFETIME": datetime.timedelta(days=1),
 }
+
+# CORS ALLOWED ORIGINS
+CORS_ALLOW_ALL_ORIGINS = True
 
 # django paypal settings
 

@@ -6,7 +6,9 @@ from ..models import Inventory
 
 
 class InventorySerializer(serializers.ModelSerializer):
-    available_quantity = serializers.IntegerField(source="get_available_quatity")
+    available_quantity = serializers.IntegerField(
+        source="get_available_quatity", read_only=True
+    )
 
     class Meta:
         model = Inventory

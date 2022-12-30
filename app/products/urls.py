@@ -7,6 +7,7 @@ from django.urls import (
     include,
 )
 from rest_framework.routers import DefaultRouter
+
 from .views import (
     ProductViewSet,
     ProductPromotionView,
@@ -15,6 +16,7 @@ from .views import (
     BackofficeProductViewset,
     BackofficeCouponsViewset,
     BackofficePromotionViewset,
+    BackofficeMediaViewset,
 )
 
 router = DefaultRouter()
@@ -28,6 +30,7 @@ router.register(
 router.register(
     "backoffice/coupons", BackofficeCouponsViewset, basename="backoffice-coupons"
 )
+router.register("backoffice/media", BackofficeMediaViewset, basename="backoffice-medi")
 router.register(
     "backoffice/promotions",
     BackofficePromotionViewset,

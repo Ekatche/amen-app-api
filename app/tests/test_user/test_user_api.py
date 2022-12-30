@@ -143,7 +143,7 @@ class PublicUserApiTests(TestCase):
         """Test authentication is required for the users."""
         res = self.client.get(me_url + "3312/")
 
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class PrivateUserAPITests(TestCase):
@@ -205,15 +205,16 @@ class PrivateUserAPITests(TestCase):
         self.client.force_authenticate(user=self.user2)
         r = self.client.post(login_url, data)
         body = r.json()
+        refresh = body["token"]["refresh"]
         if "access" in body["token"]:
             self.client.credentials(
                 HTTP_AUTHORIZATION="Bearer %s" % body["token"]["access"]
             )
-        return r.status_code, body
+        return r.status_code, body, refresh
 
     def test_logout_sucessfully(self):
         """test if logout end point works"""
-        _, body = self._login()
-        r = self.client.post(logout_url)
+        _, body, refresh = self._login()
+        r = self.client.post(logout_url, {"refresh": refresh})
 
         self.assertEquals(r.status_code, status.HTTP_200_OK)

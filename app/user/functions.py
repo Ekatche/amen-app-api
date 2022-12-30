@@ -5,6 +5,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 
 # generate authentication token
+
+
 def generate_auth_token(user, request):
     refresh = RefreshToken.for_user(user)
     token = {
@@ -45,6 +47,4 @@ def get_object_for_login(user, request, is_user_create=False):
         "last_name": user.last_name,
         "email": user.email,
         "user": user.id,
-        "phone_prefix": user.phone_prefix,
-        "phone_number": user.phone_number,
     }

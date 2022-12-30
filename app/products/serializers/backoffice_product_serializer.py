@@ -1,12 +1,10 @@
-from categories.serializers import CategorySerializer, SubCategorySerializer
-from inventory.serializers import InventorySerializer
-from rest_framework import serializers
-from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
+from rest_framework import serializers
 
-from .media_serializer import MediaSerializer
+# from .media_serializer import MediaSerializer
+# from ..serializers import PromotionSerializer
 from ..models import Product, Coupons, Promotion
-from ..serializers import PromotionSerializer
 
 
 class CouponsBackofficeSerializer(serializers.ModelSerializer):
@@ -21,14 +19,14 @@ class CouponsBackofficeSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        return Promotion.objects.create(**validated_data)
+        return Coupons.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
 
 
 class PromotionBackofficeSerializer(serializers.ModelSerializer):
-    coupons = CouponsBackofficeSerializer()
+    # coupons = CouponsBackofficeSerializer()
 
     class Meta:
         model = Promotion
@@ -55,12 +53,29 @@ class PromotionBackofficeSerializer(serializers.ModelSerializer):
         return queryset
 
 
+def get_promo_price(obj):
+    prod = Product.objects.get(id=obj.id)
+    if prod.on_promo:
+        try:
+            product = Product.objects.get(
+                Q(promo__is_active=True)
+                & Q(promo__coupons__is_active=True)
+                & Q(id=obj.id)
+            )
+            return product.promo_price
+        except ObjectDoesNotExist:
+            return None
+    else:
+        return prod.promo_price
+
+
 class BackofficeProductSerializer(serializers.ModelSerializer):
-    subcategory = SubCategorySerializer()
-    categories = CategorySerializer(many=True)
-    promotion = PromotionSerializer(source="promo")
-    image = MediaSerializer(source="images", many=True)
-    product_inventory = InventorySerializer(source="inventory")
+    # subcategory = SubCategorySerializer(read_only=True)
+    categories = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    # promotion = PromotionSerializer(source="promo", allow_null=True, read_only=True)
+    # images = MediaSerializer(many=True, read_only=True, )
+    # inventory = InventorySerializer(read_only=True)
+    promotion = serializers.CharField(source="promo", allow_null=True)
     promo_price = serializers.SerializerMethodField()
 
     class Meta:
@@ -70,8 +85,7 @@ class BackofficeProductSerializer(serializers.ModelSerializer):
             "name",
             "price",
             "slug",
-            "image",
-            "product_inventory",
+            "inventory",
             "categories",
             "subcategory",
             "description",
@@ -81,7 +95,8 @@ class BackofficeProductSerializer(serializers.ModelSerializer):
             "promo_price",
         ]
 
-    def get_promo_price(self, obj):
+    @staticmethod
+    def get_promo_price(obj):
         prod = Product.objects.get(id=obj.id)
         if prod.on_promo:
             try:

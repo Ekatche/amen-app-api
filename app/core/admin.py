@@ -13,9 +13,28 @@ class UserAdmin(BaseUserAdmin):
     """define the admin page for user"""
 
     ordering = ["id"]
-    list_display = ["email", "first_name", "last_name"]
+    list_display = [
+        "email",
+        "first_name",
+        "last_name",
+        "date_created",
+        "date_updated",
+    ]
     fieldsets = (
         (None, {"fields": ("email", "password")}),
+        (
+            _("Personal informations"),
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "birth_date",
+                    "gender",
+                    "phone_prefix",
+                    "phone_number",
+                )
+            },
+        ),
         (
             _("Permissions"),
             {"fields": ("is_active", "is_staff", "is_superuser", "amen_role")},
@@ -43,6 +62,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
+    search_fields = ["email", "first_name", "last_name", "id"]
 
 
 admin.site.register(models.User, UserAdmin)

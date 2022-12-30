@@ -10,6 +10,25 @@ from .tasks import promotion_price, promotion_management
 # Register your models_legacy here.
 
 
+class MediaInline(admin.TabularInline):
+    model = Media
+    fields = [
+        "id",
+        "image",
+        "is_feature",
+    ]
+    add_fieldsets = (
+        None,
+        {
+            "classes": ("wide",),
+            "fields": (
+                "image",
+                "is_feature",
+            ),
+        },
+    )
+
+
 class ProductAdmin(admin.ModelAdmin):
     model = Product
     list_display = [
@@ -25,7 +44,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ["is_available", "on_promo"]
     search_fields = ["name", "category", "subcategory"]
     list_editable = ["price", "is_available", "on_promo", "promo"]
-    inlines = (InventoryInLine,)
+    inlines = (InventoryInLine, MediaInline)
     prepopulated_fields = {"slug": ("name",)}
     add_fieldsets = (
         None,
