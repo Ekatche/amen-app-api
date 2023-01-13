@@ -37,6 +37,8 @@ from .serializers import (
     ListBackofficeUserSerializer,
     BackOfficeUserSerializer,
     AuthLoginSerializer,
+    BackofficeShippingAddressSerializer,
+    BackofficeBillingAddressSerializer
 )
 
 
@@ -85,9 +87,12 @@ class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 
 class Userviewset(
-    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet
 ):
     """
+    Ability to user to update their own account
     Update user
     """
 
@@ -198,7 +203,12 @@ class UserChangePassword(APIView):
 #         return self.request.user
 
 
-class BillingAddressViewset(viewsets.ModelViewSet):
+class BillingAddressViewset(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet
+):
     """
     API to Manage Billing address
     """
@@ -216,7 +226,11 @@ class BillingAddressViewset(viewsets.ModelViewSet):
         return BillingAddress.objects.filter(customer=user)
 
 
-class ShippingAddressViewset(viewsets.ModelViewSet):
+class ShippingAddressViewset(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet):
     """
     API to Manage Billing address
     """
@@ -232,6 +246,18 @@ class ShippingAddressViewset(viewsets.ModelViewSet):
         """
         user = self.request.user
         return ShippingAddress.objects.filter(customer=user)
+
+    def get(self, request, *args, **kwargs):
+        """ .retrieve method available in the mixins.RetrieveModelMixin """
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        """ .partial_update method available in the mixins.UpdateModelMixin """
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        """ .destroy method available in the mixins.DestroyModelMixin """
+        return self.destroy(request, *args, **kwargs)
 
 
 class SignUpView(APIView):
@@ -414,3 +440,38 @@ class BackofficeLogoutView(APIView):
         jwt_token.save()
 
         return Response({"msg": "Successfully Logged out"}, status=HTTP_200_OK)
+
+
+class BackofficeShippingAddressViewset(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (BackofficePermission,)
+    serializer_class = BackofficeShippingAddressSerializer
+    queryset = ShippingAddress.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.amen_role != "Administrateur":
+            raise PermissionDenied()
+        return super().destroy(request, *args, **kwargs)
+
+
+class BackofficeBillingAddressViewset(
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (BackofficePermission,)
+    serializer_class = BackofficeBillingAddressSerializer
+
+    queryset = BillingAddress.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.amen_role != "Administrateur":
+            raise PermissionDenied()
+        return super().destroy(request, *args, **kwargs)

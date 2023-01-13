@@ -5,8 +5,8 @@ from products.serializers import BackofficeProductSerializer
 
 
 class OrderBakcofficeSerializer(serializers.ModelSerializer):
-    customer = UserSerializer()
-    shipping = ShippingAddressSerializer()
+    customer = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    shipping = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Order
@@ -20,7 +20,6 @@ class OrderBakcofficeSerializer(serializers.ModelSerializer):
             "status",
             "reason",
         ]
-
     @staticmethod
     def setup_eager_loading(queryset):
         queryset = queryset.prefetch_related("customer", "shipping")

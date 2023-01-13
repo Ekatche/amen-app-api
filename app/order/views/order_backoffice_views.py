@@ -1,6 +1,7 @@
 from core.permissions import BackofficePermission
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models import Order, OrderItem
 from ..serializers import OrderBakcofficeSerializer, OrderItemBackofficeSerializer
@@ -12,7 +13,7 @@ class OrderItemBackofficeViewSet(viewsets.ModelViewSet):
     allow only admin user to modify shopping cart
     """
 
-    authentication_classes = ()
+    authentication_classes = (JWTAuthentication,)
     permission_classes = [BackofficePermission]
     serializer_class = OrderItemBackofficeSerializer
 
@@ -32,7 +33,7 @@ class OrderBackofficeViewset(viewsets.ModelViewSet):
     API endpoint to allow order to be viewed and created
     """
 
-    authentication_classes = ()
+    authentication_classes = (JWTAuthentication,)
     permission_classes = [BackofficePermission]
     serializer_class = OrderBakcofficeSerializer
 
