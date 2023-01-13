@@ -2,7 +2,11 @@ from core.permissions import ReadOnlyPermission, BackofficePermission
 from rest_framework import viewsets, mixins
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+from django_filters import rest_framework as filters
+from .filtersets import (
+    CategoryFilter,
+    SubCategoryFilter,
+)
 from .models import SubCategory, Category
 from .serializers import (
     CategorySerializer,
@@ -34,6 +38,8 @@ class CategoryBackofficeViewset(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (BackofficePermission,)
     serializer_class = CategoryBackofficeSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = CategoryFilter
     queryset = Category.objects.all()
 
     def destroy(self, request, *args, **kwargs):
@@ -66,6 +72,8 @@ class SubCategoryBackofficeViewset(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (BackofficePermission,)
     serializer_class = SubCategoryBackofficeSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = SubCategoryFilter
 
     def get_queryset(self):
         queryset = SubCategory.objects.all()

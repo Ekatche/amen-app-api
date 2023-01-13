@@ -25,3 +25,4 @@ djangorestframework-simplejwt
 django-ipware
 django-cors-headers ==3.13.0
 six ==1.16.0
+django-filter

@@ -30,6 +30,8 @@ from rest_framework.response import Response
 
 from ..models import Product
 from ..serializers import ProductSerializer, ProductSearchSerializer
+from ..filtersets import ProductFilterset
+from django_filters import rest_framework as filters
 
 
 class ProductViewSet(
@@ -45,6 +47,8 @@ class ProductViewSet(
     queryset = Product.objects.filter(is_available=True)
     lookup_field = "id"
     permission_classes = [ReadOnlyPermission]
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ProductFilterset
 
     def retrieve(self, request, id=None, category_name=None, sub_category=None):
         """

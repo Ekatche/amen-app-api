@@ -121,6 +121,36 @@ class ShippingAddressSerializer(serializers.ModelSerializer):
         ]
 
 
+class BackofficeBillingAddressSerializer(serializers.ModelSerializer):
+    customer = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = BillingAddress
+        fields = [
+            "id",
+            "customer",
+            "building_number",
+            "street",
+            "city",
+            "postcode",
+        ]
+
+
+class BackofficeShippingAddressSerializer(serializers.ModelSerializer):
+    customer = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = ShippingAddress
+        fields = [
+            "id",
+            "customer",
+            "building_number",
+            "street",
+            "city",
+            "postcode",
+        ]
+
+
 class InputSignupSerializer(serializers.Serializer):
     email = serializers.EmailField(allow_null=False)
     password = serializers.CharField(
@@ -179,6 +209,8 @@ class ListBackofficeUserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "birth_date",
+            "shippingaddress",
+            "billingaddress",
         )
         read_only_fields = fields
 
@@ -188,6 +220,9 @@ class ListBackofficeUserSerializer(serializers.ModelSerializer):
 
 
 class BackOfficeUserSerializer(serializers.ModelSerializer):
+    shippingaddress = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+    billingaddress = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
+
     class Meta:
         model = User
         fields = (
@@ -199,34 +234,36 @@ class BackOfficeUserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "birth_date",
+            "shippingaddress",
+            "billingaddress",
         )
         read_only_fields = ("date_created", "date_modified")
 
-        @staticmethod
-        def setup_eager_loading(queryset):
-            return queryset
+    def validate_email(self, email):
+        return email.lower().strip()
 
-        def validate_email(self, email):
-            return email.lower().strip()
+    def validate_phone_prefix(self, value):
+        if not value.startswith("+"):
+            raise ValidationError({"errors": ["phone_prefix must start with +"]})
 
-        def validate_phone_prefix(self, value):
-            if not value.startswith("+"):
-                raise ValidationError({"errors": ["phone_prefix must start with +"]})
+        if value:
+            return value.replace(" ", "").replace(".", "")
 
-            if value:
-                return value.replace(" ", "").replace(".", "")
+        return value
 
-            return value
+    def validate_phone_number(self, value):
+        if value:
+            return value.replace(" ", "").replace(".", "")
 
-        def validate_phone_number(self, value):
-            if value:
-                return value.replace(" ", "").replace(".", "")
+        return value
 
-            return value
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        return instance
 
-        def create(self, validated_data):
-            instance = super().create(validated_data)
-            return instance
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
-        def update(self, instance, validated_data):
-            return super().update(instance, validated_data)
+    @staticmethod
+    def setup_eager_loading(queryset):
+        return queryset

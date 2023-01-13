@@ -22,7 +22,7 @@ class CategoryBackofficeSerializer(serializers.ModelSerializer):
 
 
 class SubCategoryBackofficeSerializer(serializers.ModelSerializer):
-    # category = CategoryBackofficeSerializer()
+    category = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = SubCategory

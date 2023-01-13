@@ -1,12 +1,12 @@
 from ..models import Order, OrderItem
 from rest_framework import serializers
-from user.serializers import UserSerializer, ShippingAddressSerializer
+# from user.serializers import UserSerializer, ShippingAddressSerializer
 from products.serializers import BackofficeProductSerializer
 
 
 class OrderBakcofficeSerializer(serializers.ModelSerializer):
-    customer = UserSerializer()
-    shipping = ShippingAddressSerializer()
+    customer = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    shipping = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = Order
