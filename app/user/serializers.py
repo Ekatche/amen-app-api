@@ -235,7 +235,7 @@ class BackOfficeUserSerializer(serializers.ModelSerializer):
             "last_name",
             "birth_date",
             "shippingaddress",
-            "billingaddress"
+            "billingaddress",
         )
         read_only_fields = ("date_created", "date_modified")
 

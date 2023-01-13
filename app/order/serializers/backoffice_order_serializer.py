@@ -1,6 +1,6 @@
 from ..models import Order, OrderItem
 from rest_framework import serializers
-from user.serializers import UserSerializer, ShippingAddressSerializer
+# from user.serializers import UserSerializer, ShippingAddressSerializer
 from products.serializers import BackofficeProductSerializer
 
 
@@ -20,6 +20,7 @@ class OrderBakcofficeSerializer(serializers.ModelSerializer):
             "status",
             "reason",
         ]
+
     @staticmethod
     def setup_eager_loading(queryset):
         queryset = queryset.prefetch_related("customer", "shipping")

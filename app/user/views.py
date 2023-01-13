@@ -38,7 +38,7 @@ from .serializers import (
     BackOfficeUserSerializer,
     AuthLoginSerializer,
     BackofficeShippingAddressSerializer,
-    BackofficeBillingAddressSerializer
+    BackofficeBillingAddressSerializer,
 )
 
 
@@ -87,9 +87,7 @@ class CreateUserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
 
 class Userviewset(
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    viewsets.GenericViewSet
+    mixins.RetrieveModelMixin, mixins.UpdateModelMixin, viewsets.GenericViewSet
 ):
     """
     Ability to user to update their own account
@@ -207,7 +205,7 @@ class BillingAddressViewset(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
-    viewsets.GenericViewSet
+    viewsets.GenericViewSet,
 ):
     """
     API to Manage Billing address
@@ -230,7 +228,8 @@ class ShippingAddressViewset(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
-    viewsets.GenericViewSet):
+    viewsets.GenericViewSet,
+):
     """
     API to Manage Billing address
     """
@@ -248,15 +247,15 @@ class ShippingAddressViewset(
         return ShippingAddress.objects.filter(customer=user)
 
     def get(self, request, *args, **kwargs):
-        """ .retrieve method available in the mixins.RetrieveModelMixin """
+        """.retrieve method available in the mixins.RetrieveModelMixin"""
         return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        """ .partial_update method available in the mixins.UpdateModelMixin """
+        """.partial_update method available in the mixins.UpdateModelMixin"""
         return self.partial_update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        """ .destroy method available in the mixins.DestroyModelMixin """
+        """.destroy method available in the mixins.DestroyModelMixin"""
         return self.destroy(request, *args, **kwargs)
 
 

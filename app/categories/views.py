@@ -4,8 +4,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django_filters import rest_framework as filters
 from .filtersets import (
-CategoryFilter,
-SubCategoryFilter,
+    CategoryFilter,
+    SubCategoryFilter,
 )
 from .models import SubCategory, Category
 from .serializers import (

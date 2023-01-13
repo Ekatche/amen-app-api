@@ -20,10 +20,14 @@ router.register(
     "backoffice/user", views.BackofficeUserViewset, basename="backoffice-user"
 )
 router.register(
-    "backoffice/shippingaddress", views.BackofficeShippingAddressViewset,basename="backoffice-shippingaddress"
+    "backoffice/shippingaddress",
+    views.BackofficeShippingAddressViewset,
+    basename="backoffice-shippingaddress",
 )
 router.register(
-    "backoffice/billingaddress", views.BackofficeBillingAddressViewset, basename="backoffice-billingaddress"
+    "backoffice/billingaddress",
+    views.BackofficeBillingAddressViewset,
+    basename="backoffice-billingaddress",
 )
 
 app_name = "user"
