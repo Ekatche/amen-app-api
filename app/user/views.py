@@ -40,7 +40,8 @@ from .serializers import (
     BackofficeShippingAddressSerializer,
     BackofficeBillingAddressSerializer,
 )
-
+from django_filters import rest_framework as filters
+from .filtersets import UserFilterset
 
 # from rest_framework.exceptions import ValidationError
 
@@ -363,6 +364,8 @@ class AuthLogoutview(APIView):
 class BackofficeUserViewset(viewsets.ModelViewSet):
     authentication_classes = (JWTAuthentication,)
     permission_classes = (BackofficePermission,)
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = UserFilterset
 
     def get_serializer_class(self):
         if self.action == "list":
