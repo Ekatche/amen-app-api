@@ -40,8 +40,10 @@ class OrderBakcofficeSerializer(serializers.ModelSerializer):
 
 
 class OrderItemBackofficeSerializer(serializers.ModelSerializer):
-    order = OrderBakcofficeSerializer()
-    product = BackofficeProductSerializer()
+    order = OrderBakcofficeSerializer(read_only=True, many=False)
+    product = BackofficeProductSerializer(read_only=True, many=False)
+    # order = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
+    # product = serializers.PrimaryKeyRelatedField(many=False, read_only=True)
 
     class Meta:
         model = OrderItem

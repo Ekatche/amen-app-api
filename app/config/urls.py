@@ -47,4 +47,5 @@ urlpatterns = [
     path("api/", include("categories.urls")),
     path("api/", include("order.urls")),
     path("api/", include("inventory.urls")),
+    path("api/", include("data.urls")),
 ]

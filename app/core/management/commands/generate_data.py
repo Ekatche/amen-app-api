@@ -32,7 +32,7 @@ from inventory.factories import InventoryFactory
 NUM_USERS = 50
 NUM_PROMO = 6
 NUM_PRODUCT = 50
-NUM_ORDER = 10
+NUM_ORDER = 60
 NUM_CART = 30
 NUM_CAT = 4
 NUM_SUBCAT = 7
