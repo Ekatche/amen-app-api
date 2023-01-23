@@ -2,12 +2,13 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.views import APIView
 
-from .function import (get_global_data_per_month,
-                       total_revenue,
-                       number_of_clients,
-                       products_sold,
-                       make_query_product
-                       )
+from .function import (
+    get_global_data_per_month,
+    total_revenue,
+    number_of_clients,
+    products_sold,
+    make_query_product,
+)
 
 
 class DataPerMonthView(APIView):
@@ -21,9 +22,7 @@ class DataPerMonthView(APIView):
     def get(self, request):
         answer = get_global_data_per_month()
 
-        return Response(
-            answer, status=HTTP_200_OK
-        )
+        return Response(answer, status=HTTP_200_OK)
 
 
 class GetDataPerProduct(APIView):
@@ -37,10 +36,7 @@ class GetDataPerProduct(APIView):
     def get(self, request):
         answer = make_query_product()
 
-        return Response(
-            answer,
-            status=HTTP_200_OK
-        )
+        return Response(answer, status=HTTP_200_OK)
 
 
 class GetdescriptiveData(APIView):
@@ -59,7 +55,4 @@ class GetdescriptiveData(APIView):
             clients[0],
             products[0],
         ]
-        return Response(
-            answer,
-            status=HTTP_200_OK
-        )
+        return Response(answer, status=HTTP_200_OK)

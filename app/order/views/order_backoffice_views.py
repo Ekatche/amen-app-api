@@ -34,14 +34,16 @@ class OrderItemBackofficeViewSet(
         """
         retrieve either with orderItem id or order_id
         """
-        order_item_id = self.kwargs['id']
+        order_item_id = self.kwargs["id"]
         try:
             queryset = self.get_queryset()
             order_items = queryset.filter(Q(id=order_item_id) | Q(order=order_item_id))
             if order_items:
                 data = self.serializer_class(order_items, many=True).data
                 return Response(data, status=status.HTTP_200_OK)
-            return Response({"Error": "The object does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"Error": "The object does not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
