@@ -5,9 +5,10 @@ from ..serializers import (
     OrderSerializer,
     CartItemSerializer,
     OrderItemSerializer,
+    WishListSerializer,
 )
 from rest_framework.decorators import action
-from order.models import ShoppingCart, Order, CartItem, OrderItem
+from order.models import ShoppingCart, Order, CartItem, OrderItem, WishList
 from core.models import User
 from django.utils.translation import gettext_lazy as _
 from rest_framework.response import Response
@@ -17,6 +18,64 @@ from rest_framework.authentication import TokenAuthentication
 from django.db.models import FloatField
 from django.db.models import F
 from django.db.models import Sum
+
+
+class WishlistViewset(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+
+    queryset = WishList
+    serializer_class = WishListSerializer
+    authentication_classes = [IsAuthenticatedAndReadOnlyPermission]
+    permission_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        user = self.request.user
+        return self.queryset.filter(customer=user)
+
+    @action(detail=True, methods=["post", "put"])
+    def add_to_likes(self, request, pk=None):
+        """
+        add product in the wishlist
+        """
+        cart = self.get_object()
+
+        try:
+            product = Product.objects.get(id=request.data["product_id"])
+            customer = User.objects.get(id=request.data["customer"])
+        except Exception as e:
+            print(e)
+            return Response({"status": "failed to add product in wishlist"})
+
+        # if product already in wishlist do not add it,
+        existing_wish_product = WishList.objects.filter(
+            customer=customer, product=product
+        ).first()
+
+        # avant d'ajouter un produit,
+        # regader s'il est pas deja present dans cart
+        if existing_wish_product:
+            existing_wish_product.save()
+        else:
+            # s'il ne l'est pas creer une cart pour le client et
+            # y ajouter le produit
+            new_product = WishList(
+                customer=customer,
+                product=product,
+            )
+
+            new_product.save()
+
+        serializer = CartItemSerializer(cart)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=["patch", "delete"])
+    def remove_from_likes(self, request, pk=None):
+        return None
 
 
 class ShoppingcartViewset(
@@ -45,7 +104,7 @@ class ShoppingcartViewset(
     @action(detail=True, methods=["post", "put"])
     def add_to_cart(self, request, pk=None):
         """
-         Add an item to a user's cart.
+        Add an item to a user's cart.
         Adding to cart is disallowed if there is not enough inventory for the
         product available. If there is, the quantity is increased on an existing
         cart item or a new cart item is created with that quantity and added
@@ -74,7 +133,7 @@ class ShoppingcartViewset(
             print(_("There is no more product available"))
             return Response({"status": "fail"})
 
-        existing_cart_product = CartItem.objects.filer(
+        existing_cart_product = CartItem.objects.filter(
             cart=cart, product=product
         ).first()
 
@@ -84,6 +143,8 @@ class ShoppingcartViewset(
             existing_cart_product.quatity += quantity
             existing_cart_product.save()
         else:
+            # s'il ne l'est pas creer une cart pour le client et
+            # y ajouter le produit
             new_product = CartItem(
                 cart=cart,
                 product=product,
@@ -98,7 +159,7 @@ class ShoppingcartViewset(
     @action(detail=True, methods=["patch", "delete"])
     def remove_from_cart(self, request, pk=None):
         """
-        ustomers can only remove items from the
+        customers can only remove items from the
         cart 1 at a time, so the quantity of the product to remove from the cart
         will always be 1. If the quantity of the product to remove from the cart
         is 1, delete the cart item. If the quantity is more than 1, decrease
@@ -238,8 +299,11 @@ class OrderViewset(
                 )
             )
             # available_inventory should decrement by the appropriate amount
-            cart_item.inventory.quantity_sold += cart_item.quantity
-            cart_item.inventory.save()
+            cart_item.product.inventory.quantity_sold += cart_item.quantity
+            # quantity sold should increase by the appropriate amount
+            cart_item.product.inventory.quantity_available -= cart_item.quantity
+
+            cart_item.product.inventory.save()
 
         OrderItem.objects.bulk_create(order_items)
         # use clear instead of delete since it removes all objects from the

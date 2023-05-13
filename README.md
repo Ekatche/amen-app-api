@@ -2,7 +2,8 @@
 
 Amen is a e-commerce api app
 
-<a href="https://lucid.app/lucidchart/41e6c830-de76-4835-bab7-a846e6f195d6/edit?page=0_0&invitationId=inv_7beaef43-08ab-4bb3-a02f-49a69f8e89cc#"> Database schema</a>
+<a href="https://lucid.app/lucidchart/41e6c830-de76-4835-bab7-a846e6f195d6/edit?page=0_0&invitationId=inv_7beaef43-08ab-4bb3-a02f-49a69f8e89cc#"> LucidChart schema</a> <br> 
+<a href="https://dbdiagram.io/d/6428b3725758ac5f1725fcc0"> Database diagram </a>
 
 # before pushing to Github
 

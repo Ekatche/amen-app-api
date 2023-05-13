@@ -38,6 +38,30 @@ class ShoppingCart(models.Model):
         return self.id
 
 
+class WishList(models.Model):
+    """
+    model that contains data about the customer wishes
+    """
+
+    customer = models.OneToOneField(
+        User, on_delete=models.PROTECT, related_name="wishlist"
+    )
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="wishlist"
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        editable=True,
+        verbose_name=_("Date the product was added as wish"),
+    )
+
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        editable=True,
+        verbose_name=_("Date the product was added as wish"),
+    )
+
+
 class CartItem(models.Model):
     """
     A model that contains data for an item in the shopping cart.
@@ -50,12 +74,10 @@ class CartItem(models.Model):
         null=True,
         blank=True,
     )
-    product = models.ForeignKey(Product, related_name="items", on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
-
-    total_amount = models.DecimalField(
-        default=0, decimal_places=2, max_digits=10, null=True, blank=True
+    product = models.ForeignKey(
+        Product, related_name="product", on_delete=models.CASCADE
     )
+    quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
 
     date_created = models.DateTimeField(
         auto_now_add=True,
@@ -123,10 +145,10 @@ class OrderItem(models.Model):
     """A model that contains data for an item in an order."""
 
     order = models.ForeignKey(
-        Order, related_name="order_items", on_delete=models.CASCADE
+        Order, related_name="order_items_order", on_delete=models.CASCADE
     )
     product = models.ForeignKey(
-        Product, related_name="order_items", on_delete=models.CASCADE
+        Product, related_name="order_items_product", on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField(default=1, null=True, blank=True)
 

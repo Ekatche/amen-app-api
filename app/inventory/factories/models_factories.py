@@ -10,4 +10,4 @@ class InventoryFactory(DjangoModelFactory):
 
     product = factory.SubFactory(ProductFactory)
     quantity_sold = factory.Faker("pyint", min_value=1, max_value=50)
-    total = factory.Faker("pyint", min_value=50, max_value=100)
+    total_produced = factory.Faker("pyint", min_value=50, max_value=100)
