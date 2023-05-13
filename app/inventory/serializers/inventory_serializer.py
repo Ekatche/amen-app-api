@@ -15,7 +15,7 @@ class InventorySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "quantity_sold",
-            "total",
+            "total_produced",
             "available_quantity",
         ]
 

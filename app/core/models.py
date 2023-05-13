@@ -101,6 +101,9 @@ class ShippingAddress(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True, default="")
     city = models.CharField(max_length=100, blank=True, null=True, default="")
     postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+    country = models.CharField(max_length=60, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _("shipping address")
@@ -118,6 +121,8 @@ class ShippingAddress(models.Model):
                     + self.postcode
                     + " "
                     + self.city
+                    + " "
+                    + self.country
                 )
             elif self.street and self.postcode and not self.city:
                 return self.building_number + " " + self.street + " " + self.postcode
@@ -150,6 +155,9 @@ class BillingAddress(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True, default="")
     city = models.CharField(max_length=100, blank=True, null=True, default="")
     postcode = models.CharField(max_length=10, blank=True, null=True, default="")
+    country = models.CharField(max_length=60, blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _("billing address")
@@ -167,11 +175,13 @@ class BillingAddress(models.Model):
                     + self.postcode
                     + " "
                     + self.city
+                    + " "
+                    + self.country
                 )
             elif self.street and self.postcode and not self.city:
                 return self.building_number + " " + self.street + " " + self.postcode
             elif self.street and not self.postcode and self.city:
-                return self.building_number + " " + self.street + " " + self.city
+                return self.building_number+ " " + self.street + " " + self.city
             else:
                 return ""
         else:

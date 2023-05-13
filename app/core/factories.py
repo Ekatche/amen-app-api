@@ -33,19 +33,21 @@ class BillingAddressFactory(DjangoModelFactory):
     class Meta:
         model = BillingAddress
 
-    building_number = factory.Faker("building_number")
+    building_number = fake.building_number()
     street = factory.Faker("street_name")
     city = factory.Faker("city")
     postcode = factory.Faker("postcode")
     customer = factory.SubFactory(UserFactory)
+    country = "France"
 
 
 class ShippingAddressFactory(DjangoModelFactory):
     class Meta:
         model = ShippingAddress
 
-    building_number = factory.Faker("building_number")
+    building_number = fake.building_number()
     street = factory.Faker("street_name")
     city = factory.Faker("city")
     postcode = factory.Faker("postcode")
     customer = factory.SubFactory(UserFactory)
+    country = "France"

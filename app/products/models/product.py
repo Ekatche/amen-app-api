@@ -28,6 +28,7 @@ class Product(models.Model):
         decimal_places=2, max_digits=10, null=True, blank=True, default=0
     )
     categories = models.ManyToManyField(Category, related_name="product")
+
     subcategory = models.ForeignKey(
         SubCategory,
         on_delete=models.PROTECT,

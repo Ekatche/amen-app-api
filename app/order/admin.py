@@ -12,7 +12,6 @@ class CartItemAdmin(admin.ModelAdmin):
         "cart",
         "product",
         "quantity",
-        "total_amount",
         "date_created",
         "date_updated",
     ]

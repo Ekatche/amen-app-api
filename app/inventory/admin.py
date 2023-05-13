@@ -9,7 +9,8 @@ class InventoryAdmin(admin.ModelAdmin):
         "id",
         "product",
         "quantity_sold",
-        "total",
+        "quantity_available",
+        "total_produced",
         "date_created",
         "date_updated",
     ]
@@ -23,6 +24,13 @@ class InventoryAdmin(admin.ModelAdmin):
             ),
         },
     )
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return True if not Inventory.objects.exists() else False
+
     list_filter = ["date_created", "date_updated"]
 
 
@@ -31,7 +39,7 @@ class InventoryInLine(admin.TabularInline):
     fields = (
         "id",
         "product",
-        "total",
+        "total_produced",
     )
     add_fieldsets = (
         None,
@@ -39,7 +47,7 @@ class InventoryInLine(admin.TabularInline):
             "classes": ("wide",),
             "fields": (
                 "product",
-                "total",
+                "total_produced",
             ),
         },
     )
