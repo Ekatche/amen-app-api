@@ -181,7 +181,7 @@ class BillingAddress(models.Model):
             elif self.street and self.postcode and not self.city:
                 return self.building_number + " " + self.street + " " + self.postcode
             elif self.street and not self.postcode and self.city:
-                return self.building_number+ " " + self.street + " " + self.city
+                return self.building_number + " " + self.street + " " + self.city
             else:
                 return ""
         else:
